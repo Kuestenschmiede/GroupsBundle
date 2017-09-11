@@ -1,0 +1,69 @@
+.mod_c4g_groups input[type='text'].formdata,
+.mod_c4g_groups input[type='text'].formnodata,
+.mod_c4g_groups textarea.formdata,
+.mod_c4g_groups select.formdata {
+	display: block;
+    margin: 0 auto;
+	width: 99%;
+}
+.mod_c4g_groups input[type='checkbox'] {
+    margin-left: 10px;
+}
+.mod_c4g_groups textarea.formdata {
+    resize: vertical;
+}
+.mod_c4g_groups label {
+    font-weight: bold;
+}
+.mod_c4g_groups label.cg_checkbox_label {
+    font-weight: normal;
+}
+
+div.cg_info_block {
+    margin: 5px 10px;
+    padding: 10px;
+    font-style: italic;
+
+    border: 1px solid rgba(0, 0, 0, .1);
+    background: rgba(255, 255, 255, .3);
+}
+div.cg_block {
+    margin: 5px 10px;
+    padding: 10px;
+}
+
+.mod_c4g_groups .ui-widget,
+.c4gGuiDialogWrapper.ui-widget,
+.dataTables_wrapper {
+  font-size: 12px;
+}
+
+.mod_c4g_groups .c4gGuiContentWrapper,
+.mod_c4g_groups .c4gGuiNavigation,
+.mod_c4g_groups .c4gGuiButtons,
+.mod_c4g_groups .c4gGuiDialogButtons {
+  padding-top: 10px;
+}
+
+
+/* Datatables */
+.mod_c4g_groups table.c4gGuiDataTable tr td:first-child {
+    padding-left: 50px;
+    box-shadow: inset 40px 0 0 rgba(0,0,0,.1);
+}
+.mod_c4g_groups table.c4gGuiDataTable tr td:first-child:before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 16px;
+    height: 16px;
+    left: 10px;
+    font-size: 16px;
+    line-height: 16px;
+    border: 1px solid black;
+    background-color: rgba(0,0,0,0);
+    box-shadow: inset 0 0 5px rgba(0,0,0,.2);
+}
+.mod_c4g_groups table.c4gGuiDataTable tr.row_selected td:first-child:before {
+    background-color: rgba(0,100,0,.3);
+}

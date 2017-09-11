@@ -1,0 +1,30 @@
+{
+  "name": "con4gis/con4gis_groups",
+  "description": "Contao group administration for the frontend",
+  "keywords": ["con4gis", "groups", "contao", "c4g", "administration"],
+  "type": "contao-module",
+  "homepage": "https://con4gis.org",
+  "license": "LGPL-3.0+",
+  "authors":[
+    {
+      "name":"Küstenschmiede GmbH Software & Design",
+      "homepage":"https://kuestenschmiede.de"
+    }
+  ],
+  "require": {
+    "con4gis/con4gis_core": "~1.9"
+  },
+  "support": {
+    "issues": "https://github.com/Kuestenschmiede/con4gis_groups/issues"
+  },
+  "autoload": {
+    "classmap": [""]
+  },
+  "extra": {
+    "contao": {
+      "sources": {
+        "": "system/modules/con4gis_groups"
+      }
+    }
+  }
+}
