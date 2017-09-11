@@ -13,7 +13,7 @@
 
 //___LOAD CUSTOM CSS___________________________________________
   // needed to properly display right lists side by side
-  $GLOBALS['TL_CSS'][] = 'system/modules/con4gis_groups/assets/be_c4g_groups.css';
+  $GLOBALS['TL_CSS'][] = 'bundles/con4gisgroups/be_c4g_groups.css';
 
 
 //___CONFIG____________________________________________________
@@ -124,6 +124,7 @@
  */
 class tl_member_group_c4g_groups extends Backend
 {
+
   /**
    * Update the DCA
    * @param  DataContainer $dc
@@ -159,7 +160,7 @@ class tl_member_group_c4g_groups extends Backend
   public function getMemberList (DataContainer $dc)
   {
     if ($dc->id) {
-      $members = c4g\MemberModel::getMemberListForGroup($dc->id);
+      $members = con4gis\GroupsBundle\Resources\contao\models\MemberModel::getMemberListForGroup($dc->id);
       if (empty( $members )) {
         return array();
       }
@@ -229,8 +230,8 @@ class tl_member_group_c4g_groups extends Backend
       // and add the group to these members in the tl_member-table
       foreach ($newMembers as $member) {
         // check if member is really not part of this group. Just in case ;)
-        if (!c4g\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
-          $objMember = c4g\MemberModel::findByPk( $member );
+        if (!con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
+          $objMember = con4gis\GroupsBundle\Resources\contao\models\MemberModel::findByPk( $member );
           if ($objMember) {
             $groups = unserialize( $objMember->groups );
             $groups[] = $dc->id;
@@ -245,8 +246,8 @@ class tl_member_group_c4g_groups extends Backend
       // and remove the group from these members in the tl_member-table
       foreach ($removedMembers as $member) {
         // check if member is really part of this group. Just as above ;)
-        if (c4g\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
-          $objMember = c4g\MemberModel::findByPk( $member );
+        if (con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
+          $objMember = con4gis\GroupsBundle\Resources\contao\models\MemberModel::findByPk( $member );
           if ($objMember) {
             $memberGroups = unserialize( $objMember->groups );
             $memberGroups = array_diff( $memberGroups, array( $dc->id ) );
@@ -273,8 +274,8 @@ class tl_member_group_c4g_groups extends Backend
     if (!empty( $members )) {
       foreach ($members as $member) {
         // check if member is really part of this group. Just as above ;)
-        if (c4g\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
-          $objMember = c4g\MemberModel::findByPk( $member );
+        if (con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
+          $objMember = con4gis\GroupsBundle\Resources\contao\models\MemberModel::findByPk( $member );
           if ($objMember) {
             $memberGroups = unserialize( $objMember->groups );
             $memberGroups = array_diff( $memberGroups, array( $dc->id ) );

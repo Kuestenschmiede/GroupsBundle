@@ -16,7 +16,7 @@
  */
 ClassLoader::addNamespaces(array
 (
-	'c4g',
+	'con4gis/GroupsBundle',
 ));
 
 
@@ -26,18 +26,18 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
 	// Classes
-	'c4g\CGController'     => 'system/modules/con4gis_groups/classes/CGController.php',
-	'c4g\ViewDialogs'      => 'system/modules/con4gis_groups/classes/ViewDialogs.php',
-	'c4g\ViewLists'        => 'system/modules/con4gis_groups/classes/ViewLists.php',
-	'c4g\Views'            => 'system/modules/con4gis_groups/classes/Views.php',
+	'con4gis\GroupsBundle\CGController'     => 'src/con4gis/GroupsBundle/Resources/contao/classes/CGController.php',
+	'con4gis\GroupsBundle\ViewDialogs'      => 'src/con4gis/GroupsBundle/Resources/contao/classes/ViewDialogs.php',
+	'con4gis\GroupsBundle\ViewLists'        => 'src/con4gis/GroupsBundle/Resources/contao/classes/ViewLists.php',
+	'con4gis\GroupsBundle\Views'            => 'src/con4gis/GroupsBundle/Resources/contao/classes/Views.php',
 
 	// Models
-	'c4g\MemberGroupModel' => 'system/modules/con4gis_groups/models/MemberGroupModel.php',
-	'c4g\MemberModel'      => 'system/modules/con4gis_groups/models/MemberModel.php',
+	'con4gis\GroupsBundle\MemberGroupModel' => 'src/con4gis/GroupsBundle/Resources/contao/models/MemberGroupModel.php',
+	'con4gis\GroupsBundle\MemberModel'      => 'src/con4gis/GroupsBundle/Resources/contao/models/MemberModel.php',
 
 	// Modules
-	'C4gGroupsAjaxApi'     => 'system/modules/con4gis_groups/modules/api/C4gGroupsAjaxApi.php',
-	'c4g\C4GGroups'        => 'system/modules/con4gis_groups/modules/C4GGroups.php',
+	'C4gGroupsAjaxApi'     => 'src/con4gis/GroupsBundle/Resources/contao/modules/api/C4gGroupsAjaxApi.php',
+	'con4gis\GroupsBundle\C4GGroups'        => 'src/con4gis/GroupsBundle/Resources/contao/modules/C4GGroups.php',
 ));
 
 
@@ -46,5 +46,5 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'mod_c4g_groups' => 'system/modules/con4gis_groups/templates',
+	'mod_c4g_groups' => 'src/con4gis/GroupsBundle/Resources/contao/templates',
 ));
