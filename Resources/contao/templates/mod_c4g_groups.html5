@@ -1,0 +1,52 @@
+<?php
+
+echo '<div class="'.$this->class.' block"'.$this->cssID;
+if ($this->style):
+  echo 'style="'.$this->style.'"';
+endif;
+echo '>';
+
+?>
+
+	<?php if ($this->headline): ?>
+    <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+  <?php endif; ?>
+
+<script>
+
+(function() {
+if (typeof(jQuery)=='undefined') {
+  window.setTimeout( "document.getElementById('<?php echo $this->cgData['div']; ?>').innerHTML = '<h1>jQuery missing</h1>'", 500);
+  return;
+} else {
+	jQuery(document).ready(function() {
+		<?php
+		echo "jQuery('div#". $this->cgData['div']."' ).c4gGui({".
+				"id: ".$this->cgData['id'].", ".
+				"height: 'auto', ".
+				"width: '100%', ".
+				"ajaxUrl: '" . $this->cgData['ajaxUrl'] . "', ".
+				"ajaxData: '" . $this->cgData['ajaxData'] ."', ".
+				"initData: " . $this->cgData['initData'] .", ".
+				"jquiBreadcrumb: true, ".
+				"jquiButtons: true, ".
+				"embedDialogs: true, ".
+				"jquiEmbeddedDialogs: true, ";
+		if ($this->cgData['navPanel']) {
+			echo "navPanel: true";
+		}
+		else {
+			echo "navPanel: false";
+		}
+		echo "});";
+		?>
+	});
+}
+})();
+</script>
+<div id="<?php echo $this->cgData['div']; ?>"></div>
+<br />
+
+<?php
+	echo '</div>';
+?>
