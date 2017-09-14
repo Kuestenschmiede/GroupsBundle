@@ -151,7 +151,7 @@ class ViewDialogs
         } else {
           $selected = '';
         }
-        $view .= '<option' . $selected . ' value="' . $member->id . '">' . $member->getDisplaynameForGroup( $groupId ) . '</option>';
+        $view .= '<option' . $selected . ' value="' . $member->id . '">' . MemberModel::getDisplaynameForGroup($groupId, $member->id) . '</option>';
       }
       $view .=
         '</select>'.
@@ -424,7 +424,7 @@ class ViewDialogs
           }
           // add member to "remove list"
           $arrRemoveMemberIds[] = $objMember->id;
-          $removeMemberList .= '<li>' . $objMember->getDisplaynameForGroup( $groupId ) . '</li>';
+          $removeMemberList .= '<li>' . MemberModel::getDisplaynameForGroup($groupId, $objMember->id) . '</li>';
         }
       }
     }
@@ -527,7 +527,7 @@ class ViewDialogs
         foreach ($members as $member) {
           if ($member->id != $group->cg_owner_id) {
             // skip owner, since he is the one who wants to leave
-            $view .= '<option value="' . $member->id . '">' . $member->getDisplaynameForGroup( $groupId ) . '</option>';
+            $view .= '<option value="' . $member->id . '">' . MemberModel::getDisplaynameForGroup($groupId, $member->id) . '</option>';
             $break = false;
           }
         }
