@@ -10,7 +10,7 @@
  * @copyright Küstenschmiede GmbH Software & Design 2011 - 2017.
  * @link      https://www.kuestenschmiede.de
  */
-
+namespace con4gis\GroupsBundle\Resources\contao\modules\api;
 /**
  * Class C4gGroupsAjaxApi
  */

@@ -11,8 +11,7 @@
  * @link      https://www.kuestenschmiede.de
  */
 
-namespace c4g;
-
+namespace con4gis\GroupsBundle\Resources\contao\classes;
 /**
  * Class CGController
  * @package c4g

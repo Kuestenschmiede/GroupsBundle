@@ -11,13 +11,23 @@
  * @link      https://www.kuestenschmiede.de
  */
 
-namespace c4g;
+namespace con4gis\GroupsBundle\Resources\contao\modules;
+
+use con4gis\CoreBundle\Resources\contao\classes\C4GAutomator;
+use con4gis\CoreBundle\Resources\contao\classes\C4GJQueryGUI;
+use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\GroupsBundle\Resources\contao\classes\CGController;
+use con4gis\GroupsBundle\Resources\contao\classes\ViewDialogs;
+use con4gis\GroupsBundle\Resources\contao\classes\ViewLists;
+use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
+use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use Contao\Module;
 
 /**
  * Class C4GGroups
  * @package c4g
  */
-class C4GGroups extends \Module
+class C4GGroups extends Module
 {
   protected $strTemplate = 'mod_c4g_groups';
   protected $putVars = null;
@@ -55,7 +65,7 @@ class C4GGroups extends \Module
     $this->import('FrontendUser', 'User');
 
     // initialize used Javascript Libraries and CSS files
-    \C4GJQueryGUI::initializeLibraries(
+    C4GJQueryGUI::initializeLibraries(
       true,                     // add c4gJQuery GUI Core LIB
       true,                     // add JQuery
       true,                     // add JQuery UI
@@ -81,11 +91,7 @@ class C4GGroups extends \Module
 
     // set needed params for "jquery.c4gGui.js"
     $data['id'] = $this->id;
-    if (\class_exists('\con4gis\ApiBundle\Controller\ApiController') &&  (version_compare( VERSION, '4', '>=' ))) {
-        $data['ajaxUrl'] = "con4gis/api/c4g_groups_ajax";
-    } else {
-        $data['ajaxUrl'] = "system/modules/con4gis_core/api/index.php/c4g_groups_ajax";
-    }
+    $data['ajaxUrl'] = "con4gis/api/c4gGroupsService";
     $data['ajaxData'] = $this->id;
 
     if ($_GET['state']) {
@@ -174,7 +180,7 @@ class C4GGroups extends \Module
             }
         }
       }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $result = $this->showException($e);
     }
 
@@ -191,7 +197,7 @@ class C4GGroups extends \Module
   public function performAction ( $action )
   {
       //delete cache -- Übergangslösung bis alles läuft.
-      \c4g\Core\C4GAutomator::purgeApiCache();
+      C4GAutomator::purgeApiCache();
 
     $values = explode(':',$action,5);
     $this->action = $values[0];

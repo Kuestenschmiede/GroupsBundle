@@ -11,7 +11,10 @@
  * @link      https://www.kuestenschmiede.de
  */
 
-namespace c4g;
+namespace con4gis\GroupsBundle\Resources\contao\classes;
+use con4gis\CoreBundle\Resources\contao\classes\C4GHTMLFactory;
+use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
+use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
 
 /**
  * Class ViewLists
@@ -174,7 +177,7 @@ class ViewLists
     foreach ($members as $member)
     {
       // get membername in the right format
-      $memberName = $member->getDisplaynameForGroup($groupId);
+      $memberName = MemberModel::getDisplaynameForGroup($groupId, $member->id);
       // fetch member-ranks
       $memberRanks = MemberGroupModel::getMemberRanksOfGroupAsString( $groupId, $member->id );
 
@@ -188,7 +191,7 @@ class ViewLists
           $member->id,
           $memberName,
           $memberRanks,
-          sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['TOOLTIP_CLICKTOSELECT'], $member->getDisplaynameForGroup($groupId))
+          sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['TOOLTIP_CLICKTOSELECT'], $memberName)
       );
     }
 
