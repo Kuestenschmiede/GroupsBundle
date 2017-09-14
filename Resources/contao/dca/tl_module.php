@@ -163,7 +163,7 @@ class tl_module_c4g_groups extends Backend
   public function getRightList ()
   {
   	// load languagefile, since this it not done automatically at this point
-  	System::loadLanguageFile('tl_member_group');
+  	\Contao\System::loadLanguageFile('tl_member_group');
 
     $rights = $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'];
     foreach ($rights as $right => $rightname) {
