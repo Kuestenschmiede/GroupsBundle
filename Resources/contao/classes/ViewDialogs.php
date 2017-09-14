@@ -183,14 +183,17 @@ class ViewDialogs
       // only display the rights of the owner, since a member can never have more rights than the owner
       foreach ($arrOwnerRights as $ownerRight) {
         $rightId = 'right_' . $ownerRight;
-        $view .=
-        C4GHTMLFactory::lineBreak().
-          // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
-          //   of "jquery.c4gGui.js" cannot handle this properly
-          '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
-            $ownerRight . '"' .
-            (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
-          '<label class="cg_checkbox_label" for="' . $rightId . '">' . $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$ownerRight] . '</label>';
+        $rightName = $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$ownerRight];
+        if ($rightName) {
+            $view .=
+                C4GHTMLFactory::lineBreak().
+                // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
+                //   of "jquery.c4gGui.js" cannot handle this properly
+                '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
+                $ownerRight . '"' .
+                (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
+                '<label class="cg_checkbox_label" for="' . $rightId . '">' . $rightName . '</label>';
+        }
       }
 
       $view .=
@@ -314,14 +317,17 @@ class ViewDialogs
             // only display the rights of the owner, since a member can never have more rights than the owner
             foreach ($arrOwnerRights as $ownerRight) {
                 $rightId = 'right_' . $ownerRight;
-                $view .=
-                    C4GHTMLFactory::lineBreak().
-                    // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
-                    //   of "jquery.c4gGui.js" cannot handle this properly
-                    '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
-                    $ownerRight . '"' .
-                    (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
-                    '<label class="cg_checkbox_label" for="' . $rightId . '">' . $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$ownerRight] . '</label>';
+                $rightName = $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$ownerRight];
+                if ($rightName) {
+                    $view .=
+                        C4GHTMLFactory::lineBreak().
+                        // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
+                        //   of "jquery.c4gGui.js" cannot handle this properly
+                        '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
+                        $ownerRight . '"' .
+                        (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
+                        '<label class="cg_checkbox_label" for="' . $rightId . '">' . $rightName . '</label>';
+                }
             }
 
             $view .=
