@@ -37,4 +37,4 @@ $GLOBALS['TL_API']['c4gGroupsService'] = 'con4gis\GroupsBundle\Resources\contao\
 /**
  * ACTIVATIONPAGE-FUNCTION
  */
-$GLOBALS['C4G_ACTIVATIONACTION']['c4g_joingroup'] = 'c4g\CGController';
+$GLOBALS['C4G_ACTIVATIONACTION']['c4g_joingroup'] = 'con4gis\GroupsBundle\Resources\contao\classes\CGController';

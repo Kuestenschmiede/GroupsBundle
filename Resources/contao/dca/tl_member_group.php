@@ -144,7 +144,9 @@ class tl_member_group_c4g_groups extends Backend
   {
     $rights = $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'];
     foreach ($rights as $right => $rightname) {
-      $return[$right] = $rightname;
+      if (trim($rightname) != '') {
+          $return[$right] = $rightname;
+      }
     }
     return $return;
   }

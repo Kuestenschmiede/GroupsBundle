@@ -196,8 +196,8 @@ class C4GGroups extends Module
    */
   public function performAction ( $action )
   {
-      //delete cache -- Übergangslösung bis alles läuft.
-      C4GAutomator::purgeApiCache();
+    //delete cache -- Übergangslösung bis alles läuft.
+    C4GAutomator::purgeApiCache();
 
     $values = explode(':',$action,5);
     $this->action = $values[0];

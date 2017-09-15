@@ -16,6 +16,7 @@ use c4g\C4gActivationkeyModel;
 use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use Contao\System;
 
 /**
  * Class CGController
@@ -170,7 +171,7 @@ class CGController
       // set new member-rights
       if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_rights' )) {
         // load the languagefile, which contains the rights
-        \System::loadLanguageFile('tl_member_group');
+        System::loadLanguageFile('tl_member_group');
         $newRights = array();
         $rightPrefix = 'right_';
         // search all $arrConfig entrys for keys that starts with "right_",
@@ -370,6 +371,7 @@ class CGController
         $member->save();
 
         //we have to change the member booking count
+        //ToDo remove with BookingBundle
         if ($GLOBALS['con4gis_booking_extension']['installed']) {
           \c4g\projects\C4gBookingGroupsModel::checkMemberCount($groupId);
         }
@@ -584,6 +586,7 @@ class CGController
               MemberGroupModel::assignMemberToGroup( $params[1], $objUser->id, true );
 
               //if a member was added we have to change the member booking count
+              //ToDo remove with BookingBundle
               if ($GLOBALS['con4gis_booking_extension']['installed']) {
                 \c4g\projects\C4gBookingGroupsModel::checkMemberCount($params[1]);
               }
