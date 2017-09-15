@@ -1,0 +1,8 @@
+con4gisGroupsBundle:
+    path: /con4gis/api/groupsService/{id}/{req}
+    defaults:
+        _scope: frontend
+        _controller: "con4gisGroupsBundle:Groups:run"
+    requirements:
+        id: \d+
+        req: .*

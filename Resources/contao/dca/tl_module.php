@@ -13,7 +13,7 @@
 
 //___LOAD CUSTOM CSS___________________________________________
   // needed to properly display right lists side by side
-  $GLOBALS['TL_CSS'][] = 'system/modules/con4gis_groups/assets/be_c4g_groups.css';
+  $GLOBALS['TL_CSS'][] = 'bundles/con4gisgroups/be_c4g_groups.css';
 
 
 //___CONFIG____________________________________________________

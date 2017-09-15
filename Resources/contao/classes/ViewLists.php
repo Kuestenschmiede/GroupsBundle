@@ -429,7 +429,7 @@ class ViewLists
             foreach ($members as $member)
             {
                 // get membername in the right format
-                $memberName = $member->getDisplaynameForGroup($groupId);
+                $memberName = MemberModel::getDisplaynameForGroup($groupId, $member->id);
 
                 $data['aaData'][] = array(
                     $member->id,
