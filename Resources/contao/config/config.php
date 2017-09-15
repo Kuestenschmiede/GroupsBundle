@@ -14,9 +14,7 @@
 /**
  * Global settings
  */
-$GLOBALS['con4gis_groups_extension']['installed'] = true;
-$GLOBALS['con4gis_groups_extension']['version'] = "1.4.3-snapshot";
-
+$GLOBALS['con4gis']['groups']['installed'] = true;
 
 /**
  * FRONT END MODULES
