@@ -349,7 +349,7 @@ class CGController
         }
 
         //remove member from standardgroup
-        $allgroups = \MemberGroupModel::getGroupListForMember($member->id);
+        $allgroups = MemberGroupModel::getGroupListForMember($member->id);
         if (empty($allgroups) && ($objThis->c4g_groups_permission_applicationgroup) && ($objThis->c4g_groups_permission_applicationgroup > 0)) {
           $applicationGroup = array( $objThis->c4g_groups_permission_applicationgroup );
           if ($applicationGroup) {
@@ -358,7 +358,7 @@ class CGController
               $memberGroups = array();
             }
 
-            $agroup = \c4g\MemberGroupModel::findByPk($objThis->c4g_groups_permission_applicationgroup);
+            $agroup = MemberGroupModel::findByPk($objThis->c4g_groups_permission_applicationgroup);
             if ($agroup) {
               $groupmembers = unserialize( $agroup->cg_member );
               $agroup->cg_member = serialize( array_diff( $groupmembers, $member->id ) );
@@ -701,7 +701,7 @@ class CGController
     public static function addMember ($objThis, $arrConfig, $rankId)
     {
         $ownerId = $objThis->User->id;
-        $rank = \c4g\MemberGroupModel::findByPk( $rankId );
+        $rank = MemberGroupModel::findByPk( $rankId );
         $groupId = $rank->cg_pid;
 
         // check permissions
