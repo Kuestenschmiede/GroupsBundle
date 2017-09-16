@@ -24,8 +24,7 @@ class GroupsController extends FrontendController
         $feUser = FrontendUser::getInstance();
         $feUser->authenticate();
         if (!isset( $id ) || !is_numeric( $id )) {
-            header('HTTP/1.1 400 Bad Request');
-            die;
+            $response->setStatusCode(400);
         }
         if (!strlen($id) || $id < 1)
         {
