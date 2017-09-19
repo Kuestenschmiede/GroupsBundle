@@ -81,9 +81,9 @@ class C4GGroups extends Module
       $GLOBALS['TL_CSS']['c4g_jquery_ui'] = $objFile->path;
     } else if(!empty($this->c4g_groups_uitheme_css_select)) {
         $theme = $this->c4g_groups_uitheme_css_select;
-        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'system/modules/con4gis_core/assets/vendor/jQuery/ui-themes/themes/' . $theme . '/jquery-ui.css';
+        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/' . $theme . '/jquery-ui.css';
     } else {
-        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'system/modules/con4gis_core/assets/vendor/jQuery/ui-themes/themes/base/jquery-ui.css';
+        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/base/jquery-ui.css';
     }
 
     // load needed css
