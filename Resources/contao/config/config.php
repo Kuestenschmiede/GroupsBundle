@@ -14,16 +14,14 @@
 /**
  * Global settings
  */
-$GLOBALS['con4gis_groups_extension']['installed'] = true;
-$GLOBALS['con4gis_groups_extension']['version'] = "1.4.3-snapshot";
-
+$GLOBALS['con4gis']['groups']['installed'] = true;
 
 /**
  * FRONT END MODULES
  */
 array_insert( $GLOBALS['FE_MOD']['con4gis'], 7, array
   (
-    'c4g_groups' => 'C4GGroups'
+    'c4g_groups' => 'con4gis\GroupsBundle\Resources\contao\modules\C4GGroups'
   )
 );
 
@@ -31,10 +29,10 @@ array_insert( $GLOBALS['FE_MOD']['con4gis'], 7, array
 /**
  * API MODULES
  */
-$GLOBALS['TL_API']['c4g_groups_ajax'] = 'C4gGroupsAjaxApi';
+$GLOBALS['TL_API']['c4gGroupsService'] = 'con4gis\GroupsBundle\Resources\contao\modules\api\C4gGroupsAjaxApi';
 
 
 /**
  * ACTIVATIONPAGE-FUNCTION
  */
-$GLOBALS['C4G_ACTIVATIONACTION']['c4g_joingroup'] = 'c4g\CGController';
+$GLOBALS['C4G_ACTIVATIONACTION']['c4g_joingroup'] = 'con4gis\GroupsBundle\Resources\contao\classes\CGController';

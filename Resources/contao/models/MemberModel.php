@@ -46,7 +46,7 @@ class MemberModel extends \Contao\MemberModel
       return array();
     }
 
-    return static::findMultipleByIds(
+    return parent::findMultipleByIds(
       $members
     );
   }
@@ -133,7 +133,7 @@ class MemberModel extends \Contao\MemberModel
    * @param  integer      $groupId  [description]
    * @return string|null
    */
-  public function getDisplaynameForGroup ($groupId)
+  public static function getDisplaynameForGroup ($groupId, $memberId)
   {
     // check parameter
     if (!is_numeric( $groupId )) return;
@@ -143,10 +143,10 @@ class MemberModel extends \Contao\MemberModel
 
     // get groupsetting for member display-names
     $nameFormat = $group->cg_member_displayname;
-
+    $member = MemberModel::findByPk($memberId);
     // replace placeholders with original data
     $pattern = array('/§f/', '/§l/', '/§u/', '/§e/');
-    $replace = array($this->firstname, $this->lastname, $this->username, $this->email);
+    $replace = array($member->firstname, $member->lastname, $member->username, $member->email);
 
     return preg_replace($pattern, $replace, $nameFormat);
   }

@@ -11,7 +11,13 @@
  * @link      https://www.kuestenschmiede.de
  */
 
-namespace c4g;
+namespace con4gis\GroupsBundle\Resources\contao\classes;
+
+use c4g\C4gActivationkeyModel;
+use con4gis\CoreBundle\Resources\contao\classes\C4GHTMLFactory;
+use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
+use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
 
 /**
  * Class ViewDialogs
@@ -145,7 +151,7 @@ class ViewDialogs
         } else {
           $selected = '';
         }
-        $view .= '<option' . $selected . ' value="' . $member->id . '">' . $member->getDisplaynameForGroup( $groupId ) . '</option>';
+        $view .= '<option' . $selected . ' value="' . $member->id . '">' . MemberModel::getDisplaynameForGroup($groupId, $member->id) . '</option>';
       }
       $view .=
         '</select>'.
@@ -177,14 +183,17 @@ class ViewDialogs
       // only display the rights of the owner, since a member can never have more rights than the owner
       foreach ($arrOwnerRights as $ownerRight) {
         $rightId = 'right_' . $ownerRight;
-        $view .=
-        C4GHTMLFactory::lineBreak().
-          // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
-          //   of "jquery.c4gGui.js" cannot handle this properly
-          '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
-            $ownerRight . '"' .
-            (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
-          '<label class="cg_checkbox_label" for="' . $rightId . '">' . $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$ownerRight] . '</label>';
+        $rightName = $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$ownerRight];
+        if ($rightName) {
+            $view .=
+                C4GHTMLFactory::lineBreak().
+                // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
+                //   of "jquery.c4gGui.js" cannot handle this properly
+                '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
+                $ownerRight . '"' .
+                (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
+                '<label class="cg_checkbox_label" for="' . $rightId . '">' . $rightName . '</label>';
+        }
       }
 
       $view .=
@@ -308,14 +317,17 @@ class ViewDialogs
             // only display the rights of the owner, since a member can never have more rights than the owner
             foreach ($arrOwnerRights as $ownerRight) {
                 $rightId = 'right_' . $ownerRight;
-                $view .=
-                    C4GHTMLFactory::lineBreak().
-                    // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
-                    //   of "jquery.c4gGui.js" cannot handle this properly
-                    '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
-                    $ownerRight . '"' .
-                    (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
-                    '<label class="cg_checkbox_label" for="' . $rightId . '">' . $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$ownerRight] . '</label>';
+                $rightName = $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$ownerRight];
+                if ($rightName) {
+                    $view .=
+                        C4GHTMLFactory::lineBreak().
+                        // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
+                        //   of "jquery.c4gGui.js" cannot handle this properly
+                        '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
+                        $ownerRight . '"' .
+                        (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
+                        '<label class="cg_checkbox_label" for="' . $rightId . '">' . $rightName . '</label>';
+                }
             }
 
             $view .=
@@ -418,7 +430,7 @@ class ViewDialogs
           }
           // add member to "remove list"
           $arrRemoveMemberIds[] = $objMember->id;
-          $removeMemberList .= '<li>' . $objMember->getDisplaynameForGroup( $groupId ) . '</li>';
+          $removeMemberList .= '<li>' . MemberModel::getDisplaynameForGroup($groupId, $objMember->id) . '</li>';
         }
       }
     }
@@ -521,7 +533,7 @@ class ViewDialogs
         foreach ($members as $member) {
           if ($member->id != $group->cg_owner_id) {
             // skip owner, since he is the one who wants to leave
-            $view .= '<option value="' . $member->id . '">' . $member->getDisplaynameForGroup( $groupId ) . '</option>';
+            $view .= '<option value="' . $member->id . '">' . MemberModel::getDisplaynameForGroup($groupId, $member->id) . '</option>';
             $break = false;
           }
         }
@@ -726,7 +738,7 @@ class ViewDialogs
       $member = MemberModel::findByPk($memberId);
       if (empty( $member )) { continue; }
 
-      $memberNames[] = $member->getDisplaynameForGroup( $groupId );
+      $memberNames[] = MemberModel::getDisplaynameForGroup($groupId, $memberId);
     }
     // send mail to all members if ($memberId)s is empty
     if (empty( $memberNames )) {
@@ -857,30 +869,30 @@ class ViewDialogs
         if (!FE_USER_LOGGED_IN) return;
         $ownerId = $objThis->User->id;
         $dialogId = 'rankmemberdialog' . $ownerId;
-        $rank = \c4g\MemberGroupModel::findByPk( $rankId );
+        $rank = MemberGroupModel::findByPk( $rankId );
         $groupId = $rank->cg_pid;
 
-        if (!\c4g\MemberModel::hasRightInGroup( $ownerId, $groupId, 'rank_member' )) {
+        if (!MemberModel::hasRightInGroup( $ownerId, $groupId, 'rank_member' )) {
             return array
             (
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
             );
         }
 
-        $owner = \c4g\MemberModel::findByPk( $ownerId );
+        $owner = MemberModel::findByPk( $ownerId );
         if (empty( $owner )) { return; }
 
         $view = '<div class="c4gGroups_dialog_rankMember ui-widget ui-widget-content ui-corner-bottom">';
 
-        $memberlist = \c4g\MemberModel::getMemberListForGroup($groupId);
+        $memberlist = MemberModel::getMemberListForGroup($groupId);
         $options = array();
         foreach($memberlist as $member) {
 
             if (
-                (\c4g\MemberGroupModel::isMemberOfGroup($groupId, $member->id)) &&
-                (!\c4g\MemberGroupModel::isMemberOfGroup($rankId, $member->id))) {
+                (MemberGroupModel::isMemberOfGroup($groupId, $member->id)) &&
+                (!MemberGroupModel::isMemberOfGroup($rankId, $member->id))) {
                 $option_id    = $member->id;
-                $option_name  = $member->getDisplaynameForGroup( $groupId );
+                $option_name  = MemberModel::getDisplaynameForGroup($groupId, $option_id);
                 $options = $options . "<option value=".$option_id.">".$option_name."</option>";
             }
         }

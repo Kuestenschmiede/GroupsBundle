@@ -11,13 +11,23 @@
  * @link      https://www.kuestenschmiede.de
  */
 
-namespace c4g;
+namespace con4gis\GroupsBundle\Resources\contao\modules;
+
+use con4gis\CoreBundle\Resources\contao\classes\C4GAutomator;
+use con4gis\CoreBundle\Resources\contao\classes\C4GJQueryGUI;
+use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\GroupsBundle\Resources\contao\classes\CGController;
+use con4gis\GroupsBundle\Resources\contao\classes\ViewDialogs;
+use con4gis\GroupsBundle\Resources\contao\classes\ViewLists;
+use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
+use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use Contao\Module;
 
 /**
  * Class C4GGroups
  * @package c4g
  */
-class C4GGroups extends \Module
+class C4GGroups extends Module
 {
   protected $strTemplate = 'mod_c4g_groups';
   protected $putVars = null;
@@ -55,7 +65,7 @@ class C4GGroups extends \Module
     $this->import('FrontendUser', 'User');
 
     // initialize used Javascript Libraries and CSS files
-    \C4GJQueryGUI::initializeLibraries(
+    C4GJQueryGUI::initializeLibraries(
       true,                     // add c4gJQuery GUI Core LIB
       true,                     // add JQuery
       true,                     // add JQuery UI
@@ -71,21 +81,17 @@ class C4GGroups extends \Module
       $GLOBALS['TL_CSS']['c4g_jquery_ui'] = $objFile->path;
     } else if(!empty($this->c4g_groups_uitheme_css_select)) {
         $theme = $this->c4g_groups_uitheme_css_select;
-        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'system/modules/con4gis_core/assets/vendor/jQuery/ui-themes/themes/' . $theme . '/jquery-ui.css';
+        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/' . $theme . '/jquery-ui.css';
     } else {
-        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'system/modules/con4gis_core/assets/vendor/jQuery/ui-themes/themes/base/jquery-ui.css';
+        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/base/jquery-ui.css';
     }
 
     // load needed css
-    $GLOBALS ['TL_CSS'] [] = 'system/modules/con4gis_groups/assets/c4g_groups.css';
+    $GLOBALS ['TL_CSS'][] = 'bundles/con4gisgroups/c4g_groups.css';
 
     // set needed params for "jquery.c4gGui.js"
     $data['id'] = $this->id;
-    if (\class_exists('\con4gis\ApiBundle\Controller\ApiController') &&  (version_compare( VERSION, '4', '>=' ))) {
-        $data['ajaxUrl'] = "con4gis/api/c4g_groups_ajax";
-    } else {
-        $data['ajaxUrl'] = "system/modules/con4gis_core/api/index.php/c4g_groups_ajax";
-    }
+    $data['ajaxUrl'] = "con4gis/api/groupsService";
     $data['ajaxData'] = $this->id;
 
     if ($_GET['state']) {
@@ -174,7 +180,7 @@ class C4GGroups extends \Module
             }
         }
       }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $result = $this->showException($e);
     }
 
@@ -190,8 +196,8 @@ class C4GGroups extends \Module
    */
   public function performAction ( $action )
   {
-      //delete cache -- Übergangslösung bis alles läuft.
-      \c4g\Core\C4GAutomator::purgeApiCache();
+    //delete cache -- Übergangslösung bis alles läuft.
+    C4GAutomator::purgeApiCache();
 
     $values = explode(':',$action,5);
     $this->action = $values[0];

@@ -11,7 +11,12 @@
  * @link      https://www.kuestenschmiede.de
  */
 
-namespace c4g;
+namespace con4gis\GroupsBundle\Resources\contao\classes;
+use c4g\C4gActivationkeyModel;
+use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
+use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use Contao\System;
 
 /**
  * Class CGController
@@ -166,7 +171,7 @@ class CGController
       // set new member-rights
       if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_rights' )) {
         // load the languagefile, which contains the rights
-        \System::loadLanguageFile('tl_member_group');
+        System::loadLanguageFile('tl_member_group');
         $newRights = array();
         $rightPrefix = 'right_';
         // search all $arrConfig entrys for keys that starts with "right_",
@@ -344,7 +349,7 @@ class CGController
         }
 
         //remove member from standardgroup
-        $allgroups = \MemberGroupModel::getGroupListForMember($member->id);
+        $allgroups = MemberGroupModel::getGroupListForMember($member->id);
         if (empty($allgroups) && ($objThis->c4g_groups_permission_applicationgroup) && ($objThis->c4g_groups_permission_applicationgroup > 0)) {
           $applicationGroup = array( $objThis->c4g_groups_permission_applicationgroup );
           if ($applicationGroup) {
@@ -353,7 +358,7 @@ class CGController
               $memberGroups = array();
             }
 
-            $agroup = \c4g\MemberGroupModel::findByPk($objThis->c4g_groups_permission_applicationgroup);
+            $agroup = MemberGroupModel::findByPk($objThis->c4g_groups_permission_applicationgroup);
             if ($agroup) {
               $groupmembers = unserialize( $agroup->cg_member );
               $agroup->cg_member = serialize( array_diff( $groupmembers, $member->id ) );
@@ -366,6 +371,7 @@ class CGController
         $member->save();
 
         //we have to change the member booking count
+        //ToDo remove with BookingBundle
         if ($GLOBALS['con4gis_booking_extension']['installed']) {
           \c4g\projects\C4gBookingGroupsModel::checkMemberCount($groupId);
         }
@@ -580,6 +586,7 @@ class CGController
               MemberGroupModel::assignMemberToGroup( $params[1], $objUser->id, true );
 
               //if a member was added we have to change the member booking count
+              //ToDo remove with BookingBundle
               if ($GLOBALS['con4gis_booking_extension']['installed']) {
                 \c4g\projects\C4gBookingGroupsModel::checkMemberCount($params[1]);
               }
@@ -694,7 +701,7 @@ class CGController
     public static function addMember ($objThis, $arrConfig, $rankId)
     {
         $ownerId = $objThis->User->id;
-        $rank = \c4g\MemberGroupModel::findByPk( $rankId );
+        $rank = MemberGroupModel::findByPk( $rankId );
         $groupId = $rank->cg_pid;
 
         // check permissions

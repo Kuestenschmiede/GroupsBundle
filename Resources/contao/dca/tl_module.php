@@ -13,7 +13,7 @@
 
 //___LOAD CUSTOM CSS___________________________________________
   // needed to properly display right lists side by side
-  $GLOBALS['TL_CSS'][] = 'system/modules/con4gis_groups/assets/be_c4g_groups.css';
+  $GLOBALS['TL_CSS'][] = 'bundles/con4gisgroups/be_c4g_groups.css';
 
 
 //___CONFIG____________________________________________________
@@ -163,11 +163,13 @@ class tl_module_c4g_groups extends Backend
   public function getRightList ()
   {
   	// load languagefile, since this it not done automatically at this point
-  	System::loadLanguageFile('tl_member_group');
+  	\Contao\System::loadLanguageFile('tl_member_group');
 
     $rights = $GLOBALS['TL_LANG']['tl_member_group']['cg_rights'];
     foreach ($rights as $right => $rightname) {
-      $return[$right] = $rightname;
+      if (trim($rightname) != '') {
+          $return[$right] = $rightname;
+      }
     }
     return $return;
   }
