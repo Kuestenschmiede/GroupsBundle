@@ -1,8 +1,8 @@
 {
   "name": "con4gis/groups",
+  "type": "contao-bundle",
   "description": "The groups brick of the Contao GIS-kit con4gis. A standalone frontend-group-administration.",
   "keywords": ["con4gis", "Groups", "Frontend", "Member", "Rights", "email", "invite", "GroupsBundle"],
-  "type": "contao-bundle",
   "homepage": "https://con4gis.org",
   "license": "LGPL-3.0+",
   "authors": [
@@ -18,7 +18,8 @@
     }
   ],
   "support": {
-    "email": "support@con4gis.org"
+    "email": "support@con4gis.org",
+    "issues": "https://github.com/Kuestenschmiede/GroupsBundle/issues"
   },
   "require": {
     "con4gis/core": "^2.0"
@@ -26,9 +27,6 @@
   "conflict": {
     "contao/core": "*",
     "contao/manager-plugin": "<2.0 || >=3.0"
-  },
-  "support": {
-    "issues": "https://github.com/Kuestenschmiede/GroupsBundle/issues"
   },
   "autoload": {
     "psr-4": {

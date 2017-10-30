@@ -82,8 +82,8 @@ class tl_member_c4g_groups extends Backend
       // and add the member to these groups in the tl_member_groups-table
       foreach ($newGroups as $group) {
         // check if member is really not part of this group. Just in case ;)
-        if (!c4g\MemberGroupModel::isMemberOfGroup( $group, $dc->id )) {
-          $objGroup = c4g\MemberGroupModel::findByPk( $group );
+        if (!\con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup($group, $dc->id)) {
+          $objGroup = \con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::findByPk($group);
           if ($objGroup) {
             // check if the group has a member-limitation
             if ($objGroup->cg_max_member > 0 && $objGroup->cg_max_member <= count(unserialize($objGroup->cg_member))) {
@@ -105,8 +105,8 @@ class tl_member_c4g_groups extends Backend
       // and remove the member from these groups in the tl_member_groups-table
       foreach ($removedGroups as $group) {
         // check if member is really part of this group. Just as above ;)
-        if (c4g\MemberGroupModel::isMemberOfGroup( $group, $dc->id )) {
-          $objGroup = c4g\MemberGroupModel::findByPk( $group );
+        if (\con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup($group, $dc->id)) {
+          $objGroup = \con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::findByPk($group);
           if ($objGroup) {
             $members = unserialize( $objGroup->cg_member );
             // not the most performant way, but reliable
@@ -139,8 +139,8 @@ class tl_member_c4g_groups extends Backend
     if (!empty( $groups )) {
       foreach ($groups as $group) {
         // check if member is really part of this group. Just as above ;)
-        if (c4g\MemberGroupModel::isMemberOfGroup( $group, $dc->id )) {
-          $objGroup = c4g\MemberGroupModel::findByPk( $group );
+        if (\con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup($group, $dc->id)) {
+          $objGroup = \con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::findByPk($group);
           if ($objGroup) {
             $members = unserialize( $objGroup->cg_member );
             // not the most performant way, but reliable

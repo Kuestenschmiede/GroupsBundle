@@ -372,7 +372,7 @@ class CGController
 
         //we have to change the member booking count
         //ToDo remove with BookingBundle
-        if ($GLOBALS['con4gis_booking_extension']['installed']) {
+        if ($GLOBALS['con4gis']['booking']['installed']) {
           \c4g\projects\C4gBookingGroupsModel::checkMemberCount($groupId);
         }
 
@@ -587,7 +587,7 @@ class CGController
 
               //if a member was added we have to change the member booking count
               //ToDo remove with BookingBundle
-              if ($GLOBALS['con4gis_booking_extension']['installed']) {
+              if ($GLOBALS['con4gis']['booking']['installed']) {
                 \c4g\projects\C4gBookingGroupsModel::checkMemberCount($params[1]);
               }
             }
