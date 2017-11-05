@@ -12,6 +12,7 @@
  */
 
 namespace con4gis\GroupsBundle\Resources\contao\classes;
+
 use con4gis\CoreBundle\Resources\contao\classes\C4GHTMLFactory;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;

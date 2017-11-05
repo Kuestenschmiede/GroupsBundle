@@ -13,9 +13,9 @@
 
 namespace con4gis\GroupsBundle\Resources\contao\classes;
 
-use c4g\C4gActivationkeyModel;
 use con4gis\CoreBundle\Resources\contao\classes\C4GHTMLFactory;
 use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
 
@@ -648,7 +648,7 @@ class ViewDialogs
         if ($rightLink) {
           // generate Activationkey
           $key = C4gActivationkeyModel::generateActivationkey( 'c4g_joingroup:' . $groupId. '&' . $objThis->c4g_groups_permission_applicationgroup );
-          $link = C4gActivationkeyModel::generateActivationLinkFromKey( $key );
+          $link = C4gActivationkeyModel::generateActivationLinkFromKey($key,'c4g_joingroup');
 
           $view .=
             '<div class="cg_info_block">'.

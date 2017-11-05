@@ -12,8 +12,9 @@
  */
 
 namespace con4gis\GroupsBundle\Resources\contao\classes;
-use c4g\C4gActivationkeyModel;
+
 use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
 use Contao\System;
@@ -373,7 +374,7 @@ class CGController
         //we have to change the member booking count
         //ToDo remove with BookingBundle
         if ($GLOBALS['con4gis']['booking']['installed']) {
-          \c4g\projects\C4gBookingGroupsModel::checkMemberCount($groupId);
+            \con4gis\BookingBundle\Resources\contao\models\C4gBookingGroupsModel::checkMemberCount($groupId);
         }
 
         // redirect member back to the grouplist, if he removed himself
@@ -437,8 +438,8 @@ class CGController
     }
 
     // generate Activationkey
-    $key = C4gActivationkeyModel::generateActivationkey( 'c4g_joingroup:' . $groupId. '&' . $objThis->c4g_groups_permission_applicationgroup );
-    $link = C4gActivationkeyModel::generateActivationLinkFromKey( $key );
+    $key = C4gActivationkeyModel::generateActivationkey('c4g_joingroup:' . $groupId. '&' . $objThis->c4g_groups_permission_applicationgroup );
+    $link = C4gActivationkeyModel::generateActivationLinkFromKey($key , 'c4g_joingroup');
     // send key to user
     if (static::sendInvitationMail ($objThis, $mailaddress, $groupId, $link, $objThis->User->username)) {
       return array
@@ -588,7 +589,7 @@ class CGController
               //if a member was added we have to change the member booking count
               //ToDo remove with BookingBundle
               if ($GLOBALS['con4gis']['booking']['installed']) {
-                \c4g\projects\C4gBookingGroupsModel::checkMemberCount($params[1]);
+                  \con4gis\BookingBundle\Resources\contao\models\C4gBookingGroupsModel::checkMemberCount($params[1]);
               }
             }
           }
