@@ -16,6 +16,7 @@ namespace con4gis\GroupsBundle\Resources\contao\modules;
 use con4gis\CoreBundle\Resources\contao\classes\C4GAutomator;
 use con4gis\CoreBundle\Resources\contao\classes\C4GJQueryGUI;
 use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\CoreBundle\Resources\contao\models\C4gSettingsModel;
 use con4gis\GroupsBundle\Resources\contao\classes\CGController;
 use con4gis\GroupsBundle\Resources\contao\classes\ViewDialogs;
 use con4gis\GroupsBundle\Resources\contao\classes\ViewLists;
@@ -79,11 +80,24 @@ class C4GGroups extends Module
     if ($this->c4g_groups_appearance_themeroller_css) {
       $objFile = \FilesModel::findByUuid($this->c4g_groups_appearance_themeroller_css);
       $GLOBALS['TL_CSS']['c4g_jquery_ui'] = $objFile->path;
-    } else if(!empty($this->c4g_groups_uitheme_css_select)) {
+    } else if(!empty($this->c4g_groups_uitheme_css_select) && ($this->c4g_groups_uitheme_css_select != 'settings')) {
         $theme = $this->c4g_groups_uitheme_css_select;
         $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/' . $theme . '/jquery-ui.css';
     } else {
-        $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/base/jquery-ui.css';
+        $settings = C4gSettingsModel::findAll();
+
+        if ($settings) {
+            $settings = $settings[0];
+        }
+        if ($settings && $settings->c4g_appearance_themeroller_css) {
+            $objFile = \FilesModel::findByUuid($this->settings->c4g_appearance_themeroller_css);
+            $GLOBALS['TL_CSS']['c4g_jquery_ui'] = $objFile->path;
+        } else if ($settings && $settings->c4g_uitheme_css_select) {
+            $theme = $settings->c4g_uitheme_css_select;
+            $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/' . $theme . '/jquery-ui.css';
+        } else {
+            $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/base/jquery-ui.css';
+        }
     }
 
     // load needed css

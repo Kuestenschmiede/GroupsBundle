@@ -39,6 +39,7 @@ $GLOBALS['TL_LANG']['tl_module']['c4g_groups_uitheme_css_select']     = array(
     'Wählen Sie hier eines der Standard UI-Themes aus. Sollten Sie im nächsten Schritt eine eigene Datei auswählen, wird die geladen.'
 );
 
+$GLOBALS['TL_LANG']['tl_module']['c4g_references']['settings']  = 'con4gis Einstellungen';
 $GLOBALS['TL_LANG']['tl_module']['c4g_references']['base']      = 'base';
 $GLOBALS['TL_LANG']['tl_module']['c4g_references']['black-tie'] = 'black-tie';
 $GLOBALS['TL_LANG']['tl_module']['c4g_references']['blitzer']   = 'blitzer';
