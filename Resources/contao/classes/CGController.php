@@ -149,7 +149,8 @@ class CGController
       if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_name' ) && !empty( $arrConfig['groupname'] )) {
         // if not already taken
         $name = C4GUtils::secure_ugc( $arrConfig['groupname'] );
-        if (MemberGroupModel::findOneBy( 'name', $name )) {
+
+        if (($group->name != $name) && MemberGroupModel::findOneBy( 'name', $name )) {
           return array
           (
             'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_GROUPNAMETAKEN'],
@@ -239,7 +240,7 @@ class CGController
             if (MemberModel::hasRightInGroup( $memberId, $groupId, 'rank_edit_name' ) && !empty( $arrConfig['groupname'] )) {
                 // if not already taken
                 $name = C4GUtils::secure_ugc( $arrConfig['groupname'] );
-                if (MemberGroupModel::findOneBy( 'name', $name )) {
+                if (($group->name != $name) && MemberGroupModel::findOneBy( 'name', $name )) {
                     return array
                     (
                         'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_GROUPNAMETAKEN'],
@@ -247,17 +248,6 @@ class CGController
                 }
                 $group->name = $ownerGroup->name.'|'.$arrConfig['groupname'];
             }
-
-            // set new membername-format
-//            if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_membernameformat' ) && !empty( $arrConfig['membernameformat'] )) {
-//                // $group->cg_member_displayname = C4GUtils::secure_ugc( $arrConfig['membernameformat'] );
-//                $group->cg_member_displayname = C4GUtils::secure_ugc( $arrConfig['membernameformat'] );
-//            }
-
-            // set new owner
-//            if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_owner' ) && !empty( $arrConfig['groupowner'] )) {
-//                $group->cg_owner_id = $arrConfig['groupowner'];
-//            }
 
             // set new member-rights
             if (MemberModel::hasRightInGroup( $memberId, $groupId, 'rank_edit_rights' )) {
