@@ -11,6 +11,8 @@
  * @link      https://www.kuestenschmiede.de
  */
 
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
+
 //___LOAD CUSTOM CSS___________________________________________
   // needed to properly display right lists side by side
   $GLOBALS['TL_CSS'][] = 'bundles/con4gisgroups/be_c4g_groups.css';
@@ -22,10 +24,10 @@
 
 
 //___PALETTES__________________________________________________
-  $GLOBALS['TL_DCA']['tl_member_group']['palettes']['default'] = str_replace('{redirect_legend',
-    '{c4g_groups_legend},cg_owner_id,cg_max_member,cg_member_displayname,cg_member,cg_member_rights,cg_owner_rights;'
-    .'{redirect_legend', $GLOBALS['TL_DCA']['tl_member_group']['palettes']['default']);
-
+PaletteManipulator::create()
+    ->addLegend('c4g_groups_legend', 'redirect_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_BEFORE)
+    ->addField(array('cg_owner_id','cg_max_member','cg_member_displayname','cg_member','cg_member_rights','cg_owner_rights'), 'c4g_groups_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_APPEND)
+    ->applyToPalette('default', 'tl_member_group');
 
 //___FIELDS____________________________________________________
   $GLOBALS['TL_DCA']['tl_member_group']['fields']['cg_pid'] = array

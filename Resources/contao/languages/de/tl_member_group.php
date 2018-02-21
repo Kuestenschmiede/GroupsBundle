@@ -14,7 +14,7 @@
 /**
  * LEGENDS
  */
-$GLOBALS['TL_LANG']['tl_member_group']['c4g_groups_legend'] = 'con4gis-Groups Konfiguration';
+$GLOBALS['TL_LANG']['tl_member_group']['c4g_groups_legend'] = 'Frontendkonfiguration (con4gis-Groups)';
 
 /**
  * FIELDS
