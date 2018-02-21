@@ -103,7 +103,7 @@ class C4GGroups extends Module
     // load needed css
     $GLOBALS ['TL_CSS'][] = 'bundles/con4gisgroups/c4g_groups.css';
 
-    // set needed params for "jquery.c4gGui.js"
+    // set needed params for "c4gGui.js"
     $data['id'] = $this->id;
     $data['ajaxUrl'] = "con4gis/groupsService";
     $data['ajaxData'] = $this->id;
