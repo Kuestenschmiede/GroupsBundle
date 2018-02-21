@@ -188,7 +188,7 @@ class ViewDialogs
             $view .=
                 C4GHTMLFactory::lineBreak().
                 // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
-                //   of "jquery.c4gGui.js" cannot handle this properly
+                //   of "c4gGui.js" cannot handle this properly
                 '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
                 $ownerRight . '"' .
                 (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .
@@ -322,7 +322,7 @@ class ViewDialogs
                     $view .=
                         C4GHTMLFactory::lineBreak().
                         // [note] cannot use "memberrights[]" as name, since the custom "send-to-server"-function
-                        //   of "jquery.c4gGui.js" cannot handle this properly
+                        //   of "c4gGui.js" cannot handle this properly
                         '<input type="checkbox" class="formdata" id="' . $rightId . '" name="' . $rightId . '" value="' .
                         $ownerRight . '"' .
                         (isset($arrMemberRights[$ownerRight])? ' checked="checked"': '') . '>' .

@@ -21,7 +21,8 @@ if (typeof(jQuery)=='undefined') {
 } else {
 	jQuery(document).ready(function() {
 		<?php
-		echo "jQuery('div#". $this->cgData['div']."' ).c4gGui({".
+            echo "c4g.projects = c4g.projects || {};";
+            echo "var gui = new c4g.projects.c4gGui({".
 				"id: ".$this->cgData['id'].", ".
 				"height: 'auto', ".
 				"width: '100%', ".
@@ -31,7 +32,8 @@ if (typeof(jQuery)=='undefined') {
 				"jquiBreadcrumb: true, ".
 				"jquiButtons: true, ".
 				"embedDialogs: true, ".
-				"jquiEmbeddedDialogs: true, ";
+				"jquiEmbeddedDialogs: true, " .
+                "mainDiv: jQuery('div#". $this->cgData['div']."' ),";
 		if ($this->cgData['navPanel']) {
 			echo "navPanel: true";
 		}
@@ -39,6 +41,8 @@ if (typeof(jQuery)=='undefined') {
 			echo "navPanel: false";
 		}
 		echo "});";
+        echo "gui.setup();";
+        echo "c4g.projects.C4GGui = gui;";
 		?>
 	});
 }
