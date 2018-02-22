@@ -16,12 +16,12 @@ namespace con4gis\GroupsBundle\Resources\contao\modules;
 use con4gis\CoreBundle\Resources\contao\classes\C4GAutomator;
 use con4gis\CoreBundle\Resources\contao\classes\C4GJQueryGUI;
 use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
-use con4gis\CoreBundle\Resources\contao\models\C4gSettingsModel;
 use con4gis\GroupsBundle\Resources\contao\classes\CGController;
 use con4gis\GroupsBundle\Resources\contao\classes\ViewDialogs;
 use con4gis\GroupsBundle\Resources\contao\classes\ViewLists;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use Contao\Database;
 use Contao\Module;
 
 /**
@@ -84,7 +84,7 @@ class C4GGroups extends Module
         $theme = $this->c4g_groups_uitheme_css_select;
         $GLOBALS['TL_CSS']['c4g_jquery_ui'] = 'bundles/con4giscore/vendor/jQuery/ui-themes/themes/' . $theme . '/jquery-ui.css';
     } else {
-        $settings = C4gSettingsModel::findAll();
+        $settings = Database::getInstance()->execute("SELECT * FROM tl_c4g_settings LIMIT 1")->fetchAllAssoc();
 
         if ($settings) {
             $settings = $settings[0];
