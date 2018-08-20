@@ -23,7 +23,7 @@
 //___PALETTES__________________________________________________
 	$GLOBALS['TL_DCA']['tl_module']['palettes']['c4g_groups'] = '{title_legend},name,headline,type;'.
                                                               '{c4g_groups_appearance_legend},c4g_groups_appearance_highlight_owner,c4g_groups_uitheme_css_select,c4g_groups_appearance_themeroller_css;'.
-																															'{c4g_groups_groupdefaults_legend},c4g_groups_default_maximum_size,c4g_groups_default_member_rights,c4g_groups_default_owner_rights;'.
+																															'{c4g_groups_groupdefaults_legend},c4g_groups_default_maximum_size,cg_groups_default_displayname,c4g_groups_default_member_rights,c4g_groups_default_owner_rights;'.
 																															'{c4g_groups_permissions_legend},c4g_groups_permission_creategroups_authorized_groups,c4g_groups_permission_deletegroups_authorized_groups;'.
 																															'{protected_legend:hide},protected;'.
 																															'{expert_legend:hide},c4g_groups_permission_applicationgroup,guests,cssID,space';
@@ -68,6 +68,17 @@
 		'eval'                    => array('rgxp'=>'digit' ),
 		'sql'											=> "int(10) NOT NULL default '0'"
 	);
+
+    $GLOBALS['TL_DCA']['tl_module']['fields']['cg_groups_default_displayname'] = array
+    (
+        'label'                 => &$GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_displayname'],
+        'exclude'               => true,
+        'inputType'             => 'text',
+        'default'               => '§f §l (§e)',
+        'eval'                  => array('tl_class'=>'w50'),
+        'sql'                   => "varchar(255) NOT NULL default '§f §l (§e)'"
+    );
+
 	$GLOBALS['TL_DCA']['tl_module']['fields']['c4g_groups_default_member_rights'] = array
   (
     'label'                 	=> &$GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_member_rights'],

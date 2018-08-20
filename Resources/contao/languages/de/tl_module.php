@@ -26,6 +26,7 @@ $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['appearance_highlight_o
 $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['appearance_themeroller_css']              = array('jQuery UI ThemeRoller CSS Datei', 'Optional: wählen Sie eine, mit dem jQuery UI ThemeRoller erstellte, CSS-Datei aus, um den Stil des Moduls entsprechend anzupassen.');
 
 $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_maximum_size']              = array('Standardwert für die maximale Gruppengröße', 'Die maximale Anzahl der Mitglieder die eine neu erstellte Gruppe standardweise haben kann. (0 = infinite)');
+$GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_displayname']               = array('Standardwert für die Namensdarstellung', 'Legt fest, wie Mitgliedernamen im Frontend dargestellt werden. Die folgenen Platzhalter können verwendet werden: "§f": Vorname, "§l": Nachname, "§u": Benutzername, "§e": E-Mail-Adresse.');
 $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_member_rights']             = array('Standard Mitglieder-Rechte', 'Die Rechte die ein Mitglied dieser Gruppe standardmäßig hat, wenn sie über das Frontend angelegt wird.');
 $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_owner_rights']              = array('Standard Besitzer-Rechte', 'Die Rechte die der Besitzer dieser Gruppe standardmäßig hat, wenn sie über das Frontend angelegt wird.');
 

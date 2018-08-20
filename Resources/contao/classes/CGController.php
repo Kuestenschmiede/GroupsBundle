@@ -78,6 +78,9 @@ class CGController
     // set maximum group-size
     $group->cg_max_member = $objThis->c4g_groups_default_maximum_size;
 
+    // set displayname
+    $group->cg_member_displayname = $objThis->c4g_groups_default_displayname;
+
     // set first member (group-model)
     $group->cg_member = serialize( array( $ownerId ) );
 
@@ -653,6 +656,8 @@ class CGController
 
         // set maximum group-size
         $group->cg_max_member = $objThis->c4g_groups_default_maximum_size;
+
+        $group->cg_member_displayname = $objThis->c4g_groups_default_displayname;
 
         // set first member (group-model)
         //$group->cg_member = serialize( array( $ownerId ) );

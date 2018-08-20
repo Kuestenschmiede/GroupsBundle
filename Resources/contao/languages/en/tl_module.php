@@ -26,6 +26,7 @@ $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['appearance_highlight_o
 $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['appearance_themeroller_css']              = array('jQuery UI ThemeRoller CSS file', 'Optionally: select the CSS file you created with the jQuery UI ThemeRoller.');
 
 $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_maximum_size']              = array('Default maximum group-size', 'The number of Members a group can have by default. (0 = infinite)');
+$GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_displayname']               = array('Default displayname', 'Defines how members names should be displayed in the FE. You can use the following placeholders: "§f": firstname, "§l": lastname, "§u": username, "§e": emailaddress.');
 $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_member_rights']             = array('Default member rights', 'The rights a member will have in this group, when it is newly created in the FE.');
 $GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['default_owner_rights']              = array('Default owner rights', 'The rights an owner will have in this group, when it is newly created in the FE.');
 
