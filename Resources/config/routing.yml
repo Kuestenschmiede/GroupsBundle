@@ -12,3 +12,11 @@ inviteMember:
     defaults:
         _scope: frontend
         _controller: "con4gisGroupsBundle:Api:inviteMember"
+
+
+removeMember:
+    path: /con4gis/removeMember/{groupId}/{memberId}
+    defaults:
+        _scope: frontend
+        _controller: "con4gisGroupsBundle:Api:removeMemberFromGroup"
+    methods: [DELETE]

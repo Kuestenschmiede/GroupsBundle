@@ -27,6 +27,9 @@ class ApiController extends BaseController
     
     public function removeMemberFromGroupAction(Request $request, $groupId, $memberId)
     {
-    
+        $groupsModule = ModuleModel::findBy('type', 'c4g_groups');
+        System::loadLanguageFile('frontendModules');
+        $response = CGController::removeMemberFromGroup($groupsModule, $groupId, [$memberId]);
+        return new JsonResponse(['res' => $response]);
     }
 }

@@ -300,7 +300,8 @@ class CGController
     {
         // check permissions
         // if $memberIds is empty it means the current member leaves the group
-        if (!empty($memberIds) && !MemberModel::hasRightInGroup( $objThis->User->id, $groupId, 'member_remove' )) {
+        $user = FrontendUser::getInstance();
+        if (!empty($memberIds) && !MemberModel::hasRightInGroup( $user->id, $groupId, 'member_remove' )) {
             return array
             (
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED']
@@ -308,11 +309,10 @@ class CGController
         }
         
         if (empty($memberIds)) {
-            $memberIds = array( $objThis->User->id );
+            $memberIds = array( $user->id );
             $closeDialog = 'leavegroupdialog' . $groupId;
             // $performAction = 'viewgrouplist';
         } else {
-            $memberIds = explode(',', $memberIds);
             $closeDialog = 'removememberdialog' . $groupId;
             // $performAction = 'viewmemberlist:' . $groupId;
         }
@@ -375,7 +375,7 @@ class CGController
                 }
                 
                 // redirect member back to the grouplist, if he removed himself
-                if (($member->id === $objThis->User->id) && (!$parentId)) {
+                if (($member->id === $user->id) && (!$parentId)) {
                     $performAction = 'viewgrouplist';
                 }
             }
