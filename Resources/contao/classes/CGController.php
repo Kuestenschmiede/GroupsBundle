@@ -558,10 +558,6 @@ class CGController
         } catch (\Throwable $e) {
             return false;
         }
-        
-        // send mail
-//      return C4GUtils::sendMail( $mailData );
-    
     } // end of function "sendInvitationMail"
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
