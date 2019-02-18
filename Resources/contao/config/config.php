@@ -36,3 +36,20 @@ array_insert( $GLOBALS['FE_MOD']['con4gis'], 7, array
  * ACTIVATIONPAGE-FUNCTION
  */
 $GLOBALS['C4G_ACTIVATIONACTION']['c4g_joingroup'] = 'con4gis\GroupsBundle\Resources\contao\classes\CGController';
+
+$GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE']['con4gis Groups'] = array
+(
+    'invite_member'   => array
+    (
+        'recipients'           => array('member_email','new_member_email'),
+        'email_subject'        => array('subject'),
+        'email_text'           => array('text_content'),
+        'email_html'           => array('member_name',),
+        'email_sender_name'    => array('member_email', 'member_name'),
+        'email_sender_address' => array('member_email'),
+        'email_recipient_cc'   => array('member_email'),
+        'email_recipient_bcc'  => array('member_email'),
+        'email_replyTo'        => array('member_email'),
+        'file_content'           => array('member_name','text_content', 'subject'),
+    ),
+);

@@ -14,10 +14,14 @@
 namespace con4gis\GroupsBundle\Resources\contao\classes;
 
 use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\CoreBundle\Resources\contao\classes\notification\C4GNotification;
 use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use con4gis\ProjectsBundle\Classes\Notifications\C4GBrickNotification;
+use Contao\FrontendUser;
 use Contao\System;
+use NotificationCenter\Model\Notification;
 
 /**
  * Class CGController
@@ -401,7 +405,8 @@ class CGController
         'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOTLOGGEDIN']
       );
     }
-    if (!MemberModel::hasRightInGroup( $objThis->User->id, $groupId, 'member_invite_' )) {
+    $user = FrontendUser::getInstance();
+    if (!MemberModel::hasRightInGroup( $user->id, $groupId, 'member_invite_' )) {
       return array
       (
         'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED']
@@ -434,7 +439,7 @@ class CGController
     $key = C4gActivationkeyModel::generateActivationkey('c4g_joingroup:' . $groupId. '&' . $objThis->c4g_groups_permission_applicationgroup );
     $link = C4gActivationkeyModel::generateActivationLinkFromKey($key , 'c4g_joingroup');
     // send key to user
-    if (static::sendInvitationMail ($objThis, $mailaddress, $groupId, $link, $objThis->User->username)) {
+    if (static::sendInvitationMail ($objThis, $mailaddress, $groupId, $link, $user->email)) {
       return array
       (
         'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_NOTIFICATION_INVITATION_SEND'],
@@ -517,26 +522,41 @@ class CGController
    */
   public static function sendInvitationMail ($objThis, $to, $groupId, $link, $senderName)
   {
-    // fetch groupname
-    $objGroup = MemberGroupModel::findByPk( $groupId );
-    if (!$objGroup) { return false;}
-    $groupName = $objGroup->name;
+      // fetch groupname
+      $objGroup = MemberGroupModel::findByPk( $groupId );
+      if (!$objGroup) { return false;}
+      $groupName = $objGroup->name;
+    
+      // preparemail
+      $mailData = array();
+    
+      // reciever
+      $mailData['to'] = trim($to);
+    
+      // subject
+      $mailData['subject'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_AN_INVITATION_FROM'] , $senderName );
+    
+      // message-text
+      $mailData['text'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_INVITATION_MESSAGE'] , $senderName, $groupName, $link );
 
-    // preparemail
-    $mailData = array();
-
-    // reciever
-    $mailData['to'] = trim($to);
-
-    // subject
-    $mailData['subject'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_AN_INVITATION_FROM'] , $senderName );
-
-    // message-text
-    $mailData['text'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_INVITATION_MESSAGE'] , $senderName, $groupName, $link );
-
-    // send mail
-    return C4GUtils::sendMail( $mailData );
-
+      try {
+          $notification = new C4GNotification($GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE']['con4gis Groups']['invite_member']);
+          $notification->setTokenValue('member_email', $senderName);
+          $notification->setTokenValue('new_member_email', $mailData['to']);
+          $notification->setTokenValue('member_name', $senderName);
+//          $notification->setTokenValue('groupname', $groupName);
+          $notification->setTokenValue('subject', $mailData['subject']);
+          $notification->setTokenValue('text_content', $mailData['text']);
+          $notId = Notification::findByType('invite_member')->id;
+          $notification->send([$notId]);
+          return true;
+      } catch (\Throwable $e) {
+          return false;
+      }
+    
+      // send mail
+//      return C4GUtils::sendMail( $mailData );
+    
   } // end of function "sendInvitationMail"
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------

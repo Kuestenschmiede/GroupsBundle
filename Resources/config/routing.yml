@@ -6,3 +6,9 @@ con4gisGroupsBundle:
     requirements:
         id: \d+
         req: .*
+
+inviteMember:
+    path: /con4gis/inviteMember/{memberEmail}/{groupId}
+    defaults:
+        _scope: frontend
+        _controller: "con4gisGroupsBundle:Api:inviteMember"
