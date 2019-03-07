@@ -1,4 +1,4 @@
-#con4gis-Groups
+#con4gis-GroupsBundle
 ## Overview
 The groups brick of the Contao GIS-kit **con4gis**. A standalone frontend-group-administration. Useful with con4gis-Forum and for all member based Contao applications.
 
