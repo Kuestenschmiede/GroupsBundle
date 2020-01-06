@@ -17,6 +17,7 @@ namespace con4gis\GroupsBundle\Resources\contao\classes;
 use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
 use con4gis\CoreBundle\Resources\contao\classes\notification\C4GNotification;
 use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
+use con4gis\CoreBundle\Resources\contao\models\C4gLogModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
 use con4gis\ProjectsBundle\Classes\Notifications\C4GBrickNotification;
@@ -557,6 +558,7 @@ class CGController
             $notification->send([$notId]);
             return true;
         } catch (\Throwable $e) {
+            C4gLogModel::addLogEntry('groups', $e->getMessage());
             return false;
         }
     } // end of function "sendInvitationMail"
