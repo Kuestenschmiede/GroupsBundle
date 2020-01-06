@@ -14,15 +14,23 @@
 namespace con4gis\GroupsBundle\Controller;
 
 
+use con4gis\CoreBundle\Controller\BaseController;
 use con4gis\GroupsBundle\Resources\contao\modules\C4GGroups;
 use Contao\CoreBundle\Controller\FrontendController;
 use Contao\FrontendUser;
 use Contao\ModuleModel;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class GroupsController extends FrontendController
+class GroupsController extends BaseController
 {
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+    }
+
+
     public function runAction(Request $request, $id, $req)
     {
         $response = new JsonResponse();

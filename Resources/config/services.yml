@@ -1,0 +1,12 @@
+services:
+  con4gis\GroupsBundle\Controller\ApiController:
+    class: con4gis\GroupsBundle\Controller\ApiController
+    public: true
+    arguments:
+      - "@service_container"
+
+  con4gis\GroupsBundle\Controller\GroupsController:
+    class: con4gis\GroupsBundle\Controller\GroupsController
+    public: true
+    arguments:
+      - "@service_container"
