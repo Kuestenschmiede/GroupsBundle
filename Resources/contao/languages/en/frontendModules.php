@@ -28,6 +28,7 @@ $GLOBALS['TL_LANG']['C4G_GROUPS']['GROUPRANK']                  = 'Rank in group
 $GLOBALS['TL_LANG']['C4G_GROUPS']['GROUPMEMBER']                = 'Member';
 $GLOBALS['TL_LANG']['C4G_GROUPS']['MEMBERNAMEFORMAT']           = 'Membername format';
 $GLOBALS['TL_LANG']['C4G_GROUPS']['MEMBERRIGHTS']               = 'Member rights';
+$GLOBALS['TL_LANG']['C4G_GROUPS']['MEMBERNAME']                 = 'Team member';
 $GLOBALS['TL_LANG']['C4G_GROUPS']['GROUPOWNER']                 = 'Owner';
 $GLOBALS['TL_LANG']['C4G_GROUPS']['NEWGROUPOWNER']              = 'New owner';
 $GLOBALS['TL_LANG']['C4G_GROUPS']['GROUPCONFIG']                = 'Groupconfiguration';
