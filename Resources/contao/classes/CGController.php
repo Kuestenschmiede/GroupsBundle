@@ -20,7 +20,6 @@ use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
 use con4gis\CoreBundle\Resources\contao\models\C4gLogModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
-use con4gis\ProjectsBundle\Classes\Notifications\C4GBrickNotification;
 use Contao\FrontendUser;
 use Contao\System;
 use NotificationCenter\Model\Notification;
@@ -38,86 +37,86 @@ class CGController
      * @param  array   $arrConfig
      * @return array
      */
-    public static function createGroup ($objThis, $arrConfig)
+    public static function createGroup($objThis, $arrConfig)
     {
         // check permissions
-        if (!$objThis->currentMemberHasPermission( 'creategroups' ) || !FE_USER_LOGGED_IN) {
-            return array
-            (
+        if (!$objThis->currentMemberHasPermission('creategroups') || !FE_USER_LOGGED_IN) {
+            return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
-            );
+            ];
         }
-        
+
         $ownerId = $objThis->User->id;
-        
+
         // check if groupname is set...
-        if (empty( $arrConfig['groupname'] ) || empty( $ownerId )) {
-            return array
-            (
-                'usermessage' => $arrConfig['groupname'].$GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOGROUPNAME'],
-            );
+        if (empty($arrConfig['groupname']) || empty($ownerId)) {
+            return [
+                'usermessage' => $arrConfig['groupname'] . $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOGROUPNAME'],
+            ];
         }
         $name = $arrConfig['groupname'];
-        
+
         // ...or already taken
-        if (MemberGroupModel::findOneBy( 'name', $name )) {
-            return array
-            (
+        if (MemberGroupModel::findOneBy('name', $name)) {
+            return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_GROUPNAMETAKEN'],
-            );
+            ];
         }
-        
+
         // get owners user-model
-        $owner = MemberModel::findByPk( $ownerId );
-        if (empty( $owner )) return;
-        
+        $owner = MemberModel::findByPk($ownerId);
+        if (empty($owner)) {
+            return;
+        }
+
         // create group
         $group = new MemberGroupModel();
-        
+
         // set name
-        $group->name = C4GUtils::secure_ugc( $name );
-        
+        $group->name = C4GUtils::secure_ugc($name);
+
         // set timestamp
         $date = new \DateTime();
         $group->tstamp = $date->getTimestamp();
-        
+
         // set maximum group-size
         $group->cg_max_member = $objThis->c4g_groups_default_maximum_size;
-        
+
         // set displayname
         $group->cg_member_displayname = $objThis->c4g_groups_default_displayname;
-        
+
         // set first member (group-model)
-        $group->cg_member = serialize( array( $ownerId ) );
-        
+        $group->cg_member = serialize([$ownerId]);
+
         // set owner
         $group->cg_owner_id = $ownerId;
-        
+
         // set member-rights
         $group->cg_member_rights = $objThis->c4g_groups_default_member_rights;
         // set owner-rights
         $group->cg_owner_rights = $objThis->c4g_groups_default_owner_rights;
-        
+
         // save group
         $group->save();
         // $group->refresh();
-        
+
         // set first member (member-model)
         //    this needs to be done after the group was saved,
         //    because the new group-id is needed here
-        $ownerGroups = unserialize( $owner->groups );
-        if (empty( $owner )) { $ownerGroups = array(); }
+        $ownerGroups = unserialize($owner->groups);
+        if (empty($owner)) {
+            $ownerGroups = [];
+        }
         $ownerGroups[] = $group->id;
-        $owner->groups = serialize( $ownerGroups );
+        $owner->groups = serialize($ownerGroups);
         $owner->save();
-        
-        return array
-        (
+
+        return [
             'dialogclose' => 'groupcreatedialog' . $ownerId,
             'performaction' => 'viewmemberlist:' . $group->id,
-        );
+        ];
     } // end of function "createGroup"
-    
+
     /**
      * Edit or delete group.
      *
@@ -126,69 +125,68 @@ class CGController
      * @param  array        $arrConfig
      * @return array|null
      */
-    public static function configureGroup ($objThis, $groupId, $arrConfig)
+    public static function configureGroup($objThis, $groupId, $arrConfig)
     {
         // get group
         $group = MemberGroupModel::findByPk($groupId);
-        if (empty( $group )) { return; }
+        if (empty($group)) {
+            return;
+        }
         $action = '';
-        
+
         $memberId = $objThis->User->id;
-        
+
         $ownerGroupId = $groupId;
         $deleteRight = 'group_edit_delete';
         if ($group->cg_pid > 0) {
             $ownerGroupId = $group->cg_pid;
             $deleteRight = 'rank_edit_delete';
         }
-        
+
         // should group be deleted?
-        if (($objThis->currentMemberHasPermission('deletegroups') || MemberModel::hasRightInGroup( $memberId, $ownerGroupId, $deleteRight ))
-            && $arrConfig['deletegroup'] == $GLOBALS['TL_LANG']['C4G_GROUPS']['KEYWORD_DELETE'])
-        {
+        if (($objThis->currentMemberHasPermission('deletegroups') || MemberModel::hasRightInGroup($memberId, $ownerGroupId, $deleteRight))
+            && $arrConfig['deletegroup'] == $GLOBALS['TL_LANG']['C4G_GROUPS']['KEYWORD_DELETE']) {
             $action = 'viewgrouplist';
             if ($group->cg_pid > 0) {
-                $action = 'viewranklist:'.$group->cg_pid;
+                $action = 'viewranklist:' . $group->cg_pid;
             }
-            
+
             $group->delete();
-            
         } else {
             // set new name
-            if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_name' ) && !empty( $arrConfig['groupname'] )) {
+            if (MemberModel::hasRightInGroup($memberId, $groupId, 'group_edit_name') && !empty($arrConfig['groupname'])) {
                 // if not already taken
-                $name = C4GUtils::secure_ugc( $arrConfig['groupname'] );
-                
-                if (($group->name != $name) && MemberGroupModel::findOneBy( 'name', $name )) {
-                    return array
-                    (
+                $name = C4GUtils::secure_ugc($arrConfig['groupname']);
+
+                if (($group->name != $name) && MemberGroupModel::findOneBy('name', $name)) {
+                    return [
                         'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_GROUPNAMETAKEN'],
-                    );
+                    ];
                 }
                 $group->name = $name;
             }
-            
+
             // set new membername-format
-            if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_membernameformat' ) && !empty( $arrConfig['membernameformat'] )) {
+            if (MemberModel::hasRightInGroup($memberId, $groupId, 'group_edit_membernameformat') && !empty($arrConfig['membernameformat'])) {
                 // $group->cg_member_displayname = C4GUtils::secure_ugc( $arrConfig['membernameformat'] );
-                $group->cg_member_displayname = C4GUtils::secure_ugc( $arrConfig['membernameformat'] );
+                $group->cg_member_displayname = C4GUtils::secure_ugc($arrConfig['membernameformat']);
             }
-            
+
             // set new owner
-            if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_owner' ) && !empty( $arrConfig['groupowner'] )) {
+            if (MemberModel::hasRightInGroup($memberId, $groupId, 'group_edit_owner') && !empty($arrConfig['groupowner'])) {
                 $group->cg_owner_id = $arrConfig['groupowner'];
             }
-            
+
             // set new member-rights
-            if (MemberModel::hasRightInGroup( $memberId, $groupId, 'group_edit_rights' )) {
+            if (MemberModel::hasRightInGroup($memberId, $groupId, 'group_edit_rights')) {
                 // load the languagefile, which contains the rights
                 System::loadLanguageFile('tl_member_group');
-                $newRights = array();
+                $newRights = [];
                 $rightPrefix = 'right_';
                 // search all $arrConfig entrys for keys that starts with "right_",
                 //   are set to "true" and are valid rights
                 foreach ($arrConfig as $key => $value) {
-                    if(C4GUtils::startsWith( $key, $rightPrefix ) && ( (is_bool($value) && $value) || $value === 'true' )) {
+                    if (C4GUtils::startsWith($key, $rightPrefix) && ((is_bool($value) && $value) || $value === 'true')) {
                         $origRightname = substr($key, strlen($rightPrefix));
                         if (isset($GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$origRightname])) {
                             // save them in a new array
@@ -199,21 +197,20 @@ class CGController
                 // serialize the new array and save it
                 $group->cg_member_rights = serialize($newRights);
             }
-            
+
             $group->save();
             $action = 'viewmemberlist:' . $groupId;
             if ($group->cg_pid > 0) {
                 $action = 'viewrankmemberlist:' . $groupId;
             }
         }
-        
-        return array
-        (
+
+        return [
             'dialogclose' => 'groupconfigdialog' . $groupId,
             'performaction' => $action,
-        );
+        ];
     } // end of function "configureGroup"
-    
+
     /**
      * Edit or delete group.
      *
@@ -222,52 +219,53 @@ class CGController
      * @param  array        $arrConfig
      * @return array|null
      */
-    public static function configureRank ($objThis, $groupId, $arrConfig)
+    public static function configureRank($objThis, $groupId, $arrConfig)
     {
         // get group
         $group = MemberGroupModel::findByPk($groupId);
-        if (empty( $group )) { return; }
+        if (empty($group)) {
+            return;
+        }
         $action = '';
-        
+
         $memberId = $objThis->User->id;
-        
+
         $deleteRight = 'rank_edit_delete';
         $ownerGroupId = $group->cg_pid;
         $ownerGroup = MemberGroupModel::findByPk($ownerGroupId);
-        
-        if (empty( $ownerGroup )) { return; }
-        
+
+        if (empty($ownerGroup)) {
+            return;
+        }
+
         // should group be deleted?
-        if (($objThis->currentMemberHasPermission('deletegroups') || MemberModel::hasRightInGroup( $memberId, $ownerGroupId, $deleteRight ))
-            && $arrConfig['deletegroup'] == $GLOBALS['TL_LANG']['C4G_GROUPS']['KEYWORD_DELETE'])
-        {
-            $action = 'viewranklist:'.$group->cg_pid;
+        if (($objThis->currentMemberHasPermission('deletegroups') || MemberModel::hasRightInGroup($memberId, $ownerGroupId, $deleteRight))
+            && $arrConfig['deletegroup'] == $GLOBALS['TL_LANG']['C4G_GROUPS']['KEYWORD_DELETE']) {
+            $action = 'viewranklist:' . $group->cg_pid;
             $group->delete();
-            
         } else {
             // set new name
-            if (MemberModel::hasRightInGroup( $memberId, $groupId, 'rank_edit_name' ) && !empty( $arrConfig['groupname'] )) {
+            if (MemberModel::hasRightInGroup($memberId, $groupId, 'rank_edit_name') && !empty($arrConfig['groupname'])) {
                 // if not already taken
-                $name = C4GUtils::secure_ugc( $arrConfig['groupname'] );
-                if (($group->name != $name) && MemberGroupModel::findOneBy( 'name', $name )) {
-                    return array
-                    (
+                $name = C4GUtils::secure_ugc($arrConfig['groupname']);
+                if (($group->name != $name) && MemberGroupModel::findOneBy('name', $name)) {
+                    return [
                         'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_GROUPNAMETAKEN'],
-                    );
+                    ];
                 }
-                $group->name = $ownerGroup->name.'|'.$arrConfig['groupname'];
+                $group->name = $ownerGroup->name . '|' . $arrConfig['groupname'];
             }
-            
+
             // set new member-rights
-            if (MemberModel::hasRightInGroup( $memberId, $groupId, 'rank_edit_rights' )) {
+            if (MemberModel::hasRightInGroup($memberId, $groupId, 'rank_edit_rights')) {
                 // load the languagefile, which contains the rights
                 \System::loadLanguageFile('tl_member_group');
-                $newRights = array();
+                $newRights = [];
                 $rightPrefix = 'right_';
                 // search all $arrConfig entrys for keys that starts with "right_",
                 //   are set to "true" and are valid rights
                 foreach ($arrConfig as $key => $value) {
-                    if(C4GUtils::startsWith( $key, $rightPrefix ) && ( (is_bool($value) && $value) || $value === 'true' )) {
+                    if (C4GUtils::startsWith($key, $rightPrefix) && ((is_bool($value) && $value) || $value === 'true')) {
                         $origRightname = substr($key, strlen($rightPrefix));
                         if (isset($GLOBALS['TL_LANG']['tl_member_group']['cg_rights'][$origRightname])) {
                             // save them in a new array
@@ -278,18 +276,17 @@ class CGController
                 // serialize the new array and save it
                 $group->cg_member_rights = serialize($newRights);
             }
-            
+
             $group->save();
             $action = 'viewrankmemberlist:' . $groupId;
         }
-        
-        return array
-        (
+
+        return [
             'dialogclose' => 'rankconfigdialog' . $groupId,
             'performaction' => $action,
-        );
+        ];
     } // end of function "configureRank"
-    
+
     /**
      * Remove member(s) from (or leave) group
      *
@@ -298,98 +295,98 @@ class CGController
      * @param  array       $memberIds
      * @return array|null
      */
-    public static function removeMemberFromGroup ($objThis, $groupId, $memberIds=array())
+    public static function removeMemberFromGroup($objThis, $groupId, $memberIds = [])
     {
         // check permissions
         // if $memberIds is empty it means the current member leaves the group
         $user = FrontendUser::getInstance();
-        if (!empty($memberIds) && !MemberModel::hasRightInGroup( $user->id, $groupId, 'member_remove' )) {
-            return array
-            (
-                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED']
-            );
+        if (!empty($memberIds) && !MemberModel::hasRightInGroup($user->id, $groupId, 'member_remove')) {
+            return [
+                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
+            ];
         }
-        
+
         if (empty($memberIds)) {
-            $memberIds = array( $user->id );
+            $memberIds = [$user->id];
             $closeDialog = 'leavegroupdialog' . $groupId;
-            // $performAction = 'viewgrouplist';
+        // $performAction = 'viewgrouplist';
         } else {
             $closeDialog = 'removememberdialog' . $groupId;
             // $performAction = 'viewmemberlist:' . $groupId;
         }
-        
+
         // get group
-        $group = MemberGroupModel::findByPk( $groupId );
-        $members = MemberModel::findMultipleByIds( $memberIds );
-        if (empty( $group ) || empty( $members )) { return; }
-        
+        $group = MemberGroupModel::findByPk($groupId);
+        $members = MemberModel::findMultipleByIds($memberIds);
+        if (empty($group) || empty($members)) {
+            return;
+        }
+
         // remove members froum group-model
-        $groupmembers = unserialize( $group->cg_member );
-        $group->cg_member = serialize( array_diff( $groupmembers, $memberIds ) );
+        $groupmembers = unserialize($group->cg_member);
+        $group->cg_member = serialize(array_diff($groupmembers, $memberIds));
         $group->save();
-        
+
         // remove group from member-models
-        $arrGroup = array( $groupId );
+        $arrGroup = [$groupId];
         $memberGroups = '';
-        
+
         $parentId = $group->cg_pid;
         if ($parentId > 0) {
             $performAction = 'viewrankmemberlist:' . $groupId;
         } else {
             $performAction = 'viewmemberlist:' . $groupId;
         }
-        
+
         foreach ($members as $member) {
-            $memberGroups = unserialize( $member->groups );
-            if (!empty( $memberGroups )) {
-                $memberGroups = array_diff( $memberGroups, $arrGroup );
-                if (empty( $memberGroups )) {
-                    $memberGroups = array();
+            $memberGroups = unserialize($member->groups);
+            if (!empty($memberGroups)) {
+                $memberGroups = array_diff($memberGroups, $arrGroup);
+                if (empty($memberGroups)) {
+                    $memberGroups = [];
                 }
-                
+
                 //remove member from standardgroup
                 $allgroups = MemberGroupModel::getGroupListForMember($member->id);
                 if (empty($allgroups) && ($objThis->c4g_groups_permission_applicationgroup) && ($objThis->c4g_groups_permission_applicationgroup > 0)) {
-                    $applicationGroup = array( $objThis->c4g_groups_permission_applicationgroup );
+                    $applicationGroup = [$objThis->c4g_groups_permission_applicationgroup];
                     if ($applicationGroup) {
-                        $memberGroups = array_diff( $memberGroups, $applicationGroup );
-                        if (empty( $memberGroups )) {
-                            $memberGroups = array();
+                        $memberGroups = array_diff($memberGroups, $applicationGroup);
+                        if (empty($memberGroups)) {
+                            $memberGroups = [];
                         }
-                        
+
                         $agroup = MemberGroupModel::findByPk($objThis->c4g_groups_permission_applicationgroup);
                         if ($agroup) {
-                            $groupmembers = unserialize( $agroup->cg_member );
-                            $agroup->cg_member = serialize( array_diff( $groupmembers, $member->id ) );
+                            $groupmembers = unserialize($agroup->cg_member);
+                            $agroup->cg_member = serialize(array_diff($groupmembers, $member->id));
                             $agroup->save();
                         }
                     }
                 }
-                
-                $member->groups = serialize( $memberGroups );
+
+                $member->groups = serialize($memberGroups);
                 $member->save();
-                
+
                 //we have to change the member booking count
                 //ToDo remove with BookingBundle
                 if ($GLOBALS['con4gis']['booking']['installed']) {
                     \con4gis\BookingBundle\Resources\contao\models\C4gBookingGroupsModel::checkMemberCount($groupId);
                 }
-                
+
                 // redirect member back to the grouplist, if he removed himself
                 if (($member->id === $user->id) && (!$parentId)) {
                     $performAction = 'viewgrouplist';
                 }
             }
         }
-        
-        return array
-        (
+
+        return [
             'dialogclose' => $closeDialog,
             'performaction' => $performAction,
-        );
+        ];
     } // end of function "removeMemberFromGroup"
-    
+
     /**
      * Function for member-invitation
      *
@@ -398,63 +395,57 @@ class CGController
      * @param  string   $mailaddress
      * @return array
      */
-    public static function inviteMember ($objThis, $groupId, $mailaddress)
+    public static function inviteMember($objThis, $groupId, $mailaddress)
     {
         // check permissions
         if (!FE_USER_LOGGED_IN) {
-            return array
-            (
-                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOTLOGGEDIN']
-            );
+            return [
+                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOTLOGGEDIN'],
+            ];
         }
         $user = FrontendUser::getInstance();
-        if (!MemberModel::hasRightInGroup( $user->id, $groupId, 'member_invite_' )) {
-            return array
-            (
-                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED']
-            );
+        if (!MemberModel::hasRightInGroup($user->id, $groupId, 'member_invite_')) {
+            return [
+                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
+            ];
         }
-        
+
         // secure the user generated content
-        $mailaddress = C4GUtils::secure_ugc( $mailaddress );
-        
+        $mailaddress = C4GUtils::secure_ugc($mailaddress);
+
         // check if it's a valid emailaddress
-        if (!C4GUtils::emailIsValid( $mailaddress )) {
-            return array
-            (
-                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_EMAILNOTVALID']
-            );
+        if (!C4GUtils::emailIsValid($mailaddress)) {
+            return [
+                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_EMAILNOTVALID'],
+            ];
         }
-        
+
         // check if a user with this emailaddress has already joined the group
-        $objMember = \MemberModel::findOneBy( 'email', $mailaddress );
+        $objMember = \MemberModel::findOneBy('email', $mailaddress);
         if ($objMember) {
-            if (MemberGroupModel::isMemberOfGroup( $groupId, $objMember->id )) {
-                return array
-                (
-                    'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_USERALREADYINGROUP']
-                );
+            if (MemberGroupModel::isMemberOfGroup($groupId, $objMember->id)) {
+                return [
+                    'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_USERALREADYINGROUP'],
+                ];
             }
         }
-        
+
         // generate Activationkey
-        $key = C4gActivationkeyModel::generateActivationkey('c4g_joingroup:' . $groupId. '&' . $objThis->c4g_groups_permission_applicationgroup );
-        $link = C4gActivationkeyModel::generateActivationLinkFromKey($key , 'c4g_joingroup');
+        $key = C4gActivationkeyModel::generateActivationkey('c4g_joingroup:' . $groupId . '&' . $objThis->c4g_groups_permission_applicationgroup);
+        $link = C4gActivationkeyModel::generateActivationLinkFromKey($key, 'c4g_joingroup');
         // send key to user
-        if (static::sendInvitationMail ($objThis, $mailaddress, $groupId, $link, $user->email)) {
-            return array
-            (
+        if (static::sendInvitationMail($objThis, $mailaddress, $groupId, $link, $user->email)) {
+            return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_NOTIFICATION_INVITATION_SEND'],
-                'dialogclose' => 'invitememberdialog'.$groupId
-            );
-        } else {
-            return array
-            (
-                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_INVITENOTSEND']
-            );
+                'dialogclose' => 'invitememberdialog' . $groupId,
+            ];
         }
+
+        return [
+                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_INVITENOTSEND'],
+            ];
     } // end of function "inviteMember"
-    
+
     /**
      * Send a mail to choosen (or all) members
      *
@@ -463,60 +454,63 @@ class CGController
      * @param  array    $data
      * @return array
      */
-    public static function sendMailToMember ($objThis, $groupId, $data)
+    public static function sendMailToMember($objThis, $groupId, $data)
     {
         // translate member-ids to their mailaddresses, if needed
-        if (empty( $data['to'] )) {
-            $objMembers = empty( $data['toid'] ) ? MemberModel::getMemberListForGroup( $groupId ) : MemberModel::findMultipleByIds(explode(';', $data['toid'] ));
+        if (empty($data['to'])) {
+            $objMembers = empty($data['toid']) ? MemberModel::getMemberListForGroup($groupId) : MemberModel::findMultipleByIds(explode(';', $data['toid']));
             if ($objMembers) {
-                $mailaddresses = array();
+                $mailaddresses = [];
                 foreach ($objMembers as $objMember) {
                     // skip own address
-                    if ($objMember->id == $objThis->User->id) continue;
+                    if ($objMember->id == $objThis->User->id) {
+                        continue;
+                    }
                     $mailaddresses[] = $objMember->email;
                 }
-                
+
                 // fetch groupname
-                $objGroup = MemberGroupModel::findByPk( $groupId );
-                if (!$objGroup) { return false;}
+                $objGroup = MemberGroupModel::findByPk($groupId);
+                if (!$objGroup) {
+                    return false;
+                }
                 $groupName = $objGroup->name;
-                
+
                 // reciever
                 $data['to'] = trim(implode(', ', $mailaddresses));
-                
+
                 // subject
                 //$mailData['subject'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_AN_INVITATION_FROM'] , $senderName );
-                
+
                 // message-text
                 $text = $data['text'];
-                $data['text'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_MESSAGE'] , $objThis->User->username, $groupName, $text );
+                $data['text'] = sprintf($GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_MESSAGE'], $objThis->User->username, $groupName, $text);
             }
         }
         // check mail
-        $mailErrors = C4GUtils::getMailErrors( $data );
-        if (!empty( $mailErrors )) {
+        $mailErrors = C4GUtils::getMailErrors($data);
+        if (!empty($mailErrors)) {
             return $mailErrors;
         }
-        
+
         try {
             $notification = new C4GNotification($GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE']['con4gis Groups']['notify_member']);
             $notification->setTokenValue('mail_receiver', $data['to']);
             $notification->setTokenValue('text_content', $data['text']);
             $notId = Notification::findByType('notify_member')->id;
             $notification->send([$notId]);
-            return array
-            (
-                'performaction' => 'viewmemberlist:'.$groupId,
-                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_NOTIFICATION_SEND']
-            );
+
+            return [
+                'performaction' => 'viewmemberlist:' . $groupId,
+                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_NOTIFICATION_SEND'],
+            ];
         } catch (\Exception $e) {
-            return array
-            (
-                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_EMAILNOTSEND']
-            );
+            return [
+                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_EMAILNOTSEND'],
+            ];
         }
     } // end of function "sendMailToMember"
-    
+
     /**
      * Sends an invitation (+link) to an email-address
      *
@@ -527,25 +521,27 @@ class CGController
      * @param  string          $senderName
      * @return array|boolean
      */
-    public static function sendInvitationMail ($objThis, $to, $groupId, $link, $senderName)
+    public static function sendInvitationMail($objThis, $to, $groupId, $link, $senderName)
     {
         // fetch groupname
-        $objGroup = MemberGroupModel::findByPk( $groupId );
-        if (!$objGroup) { return false;}
+        $objGroup = MemberGroupModel::findByPk($groupId);
+        if (!$objGroup) {
+            return false;
+        }
         $groupName = $objGroup->name;
-        
+
         // preparemail
-        $mailData = array();
-        
+        $mailData = [];
+
         // reciever
         $mailData['to'] = trim($to);
-        
+
         // subject
-        $mailData['subject'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_AN_INVITATION_FROM'] , $senderName );
-        
+        $mailData['subject'] = sprintf($GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_AN_INVITATION_FROM'], $senderName);
+
         // message-text
-        $mailData['text'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_INVITATION_MESSAGE'] , $senderName, $groupName, $link );
-        
+        $mailData['text'] = sprintf($GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_INVITATION_MESSAGE'], $senderName, $groupName, $link);
+
         try {
             $notification = new C4GNotification($GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE']['con4gis Groups']['invite_member']);
             $notification->setTokenValue('member_email', $senderName);
@@ -556,15 +552,17 @@ class CGController
             $notification->setTokenValue('text_content', $mailData['text']);
             $notId = Notification::findByType('invite_member')->id;
             $notification->send([$notId]);
+
             return true;
         } catch (\Throwable $e) {
             C4gLogModel::addLogEntry('groups', $e->getMessage());
+
             return false;
         }
     } // end of function "sendInvitationMail"
 
-//----------------------------------------------------------------------------------------------------------------------------------------------------
-    
+    //----------------------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * Needed for using the "con4gis-Core - Activationpage"!
      * Handles join-group-functionality after clicking an invitationlink
@@ -573,36 +571,35 @@ class CGController
      * @param  array   $params
      * @return array            Keys: "success" and "output"
      */
-    public function performActivationAction ($action, $params)
+    public function performActivationAction($action, $params)
     {
         // load the languagefile
         // (because this is not available, by default when calling this function externally)
         \System::loadLanguageFile('frontendModules');
         // prepare output-array
-        $return = array
-        (
+        $return = [
             'success' => false,
-            'output' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_CANNOTJOINGROUP']
-        );
-        
+            'output' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_CANNOTJOINGROUP'],
+        ];
+
         //check if the user is logged in
         if (FE_USER_LOGGED_IN === true) {
             $objUser = \FrontendUser::getInstance();
-            
+
             // check action
             switch ($action) {
                 case 'c4g_joingroup':
-                    if (!empty( $params[0] ) && MemberGroupModel::assignMemberToGroup( $params[0], $objUser->id, true )) {
-                        $objGroup = MemberGroupModel::findByPk( $params[0] );
+                    if (!empty($params[0]) && MemberGroupModel::assignMemberToGroup($params[0], $objUser->id, true)) {
+                        $objGroup = MemberGroupModel::findByPk($params[0]);
                         if ($objGroup) {
-                            $return['output'] = sprintf( $GLOBALS['TL_LANG']['C4G_GROUPS']['INFO_GROUPJOINED'], $objGroup->name );
+                            $return['output'] = sprintf($GLOBALS['TL_LANG']['C4G_GROUPS']['INFO_GROUPJOINED'], $objGroup->name);
                             $return['success'] = true;
                         }
-                        
+
                         // assign member to the standard group
-                        if ( !empty($params[1]) && ($params[1] > 0) ) {
-                            MemberGroupModel::assignMemberToGroup( $params[1], $objUser->id, true );
-                            
+                        if (!empty($params[1]) && ($params[1] > 0)) {
+                            MemberGroupModel::assignMemberToGroup($params[1], $objUser->id, true);
+
                             //if a member was added we have to change the member booking count
                             //ToDo remove with BookingBundle
                             if ($GLOBALS['con4gis']['booking']['installed']) {
@@ -610,17 +607,17 @@ class CGController
                             }
                         }
                     }
+
                     break;
-                
+
                 default:
                     break;
             }
-            
         }
         // return output-array
         return $return;
     }
-    
+
     /**
      * Creates a new rank.
      *
@@ -628,73 +625,70 @@ class CGController
      * @param  array   $arrConfig
      * @return array
      */
-    public static function createRank ($objThis, $arrConfig, $groupId)
+    public static function createRank($objThis, $arrConfig, $groupId)
     {
         $ownerId = $objThis->User->id;
-        
+
         // check permissions
-        if (!MemberModel::hasRightInGroup( $ownerId, $groupId, 'rank_create' ) || !FE_USER_LOGGED_IN) {
-            return array
-            (
+        if (!MemberModel::hasRightInGroup($ownerId, $groupId, 'rank_create') || !FE_USER_LOGGED_IN) {
+            return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
-            );
+            ];
         }
-        
-        
-        
+
         // check if rankname is set...
-        if (empty( $arrConfig['groupname'] ) || empty( $ownerId )) {
-            return array
-            (
-                'usermessage' => $arrConfig['rankname'].$GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOGROUPNAME'],
-            );
+        if (empty($arrConfig['groupname']) || empty($ownerId)) {
+            return [
+                'usermessage' => $arrConfig['rankname'] . $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOGROUPNAME'],
+            ];
         }
-        
-        $group = $group = MemberGroupModel::findByPk( $groupId );
-        $name = $group->name.'|'.$arrConfig['groupname'];
-        
+
+        $group = $group = MemberGroupModel::findByPk($groupId);
+        $name = $group->name . '|' . $arrConfig['groupname'];
+
         // ...or already taken
-        if (MemberGroupModel::findOneBy( 'name', $name )) {
-            return array
-            (
+        if (MemberGroupModel::findOneBy('name', $name)) {
+            return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_GROUPNAMETAKEN'],
-            );
+            ];
         }
-        
+
         // get owners user-model
-        $owner = MemberModel::findByPk( $ownerId );
-        if (empty( $owner )) return;
-        
+        $owner = MemberModel::findByPk($ownerId);
+        if (empty($owner)) {
+            return;
+        }
+
         // create group
         $group = new MemberGroupModel();
-        
+
         // set parent
         $group->cg_pid = $groupId;
-        
+
         // set name
-        $group->name = C4GUtils::secure_ugc( $name );
-        
+        $group->name = C4GUtils::secure_ugc($name);
+
         // set timestamp
         $date = new \DateTime();
         $group->tstamp = $date->getTimestamp();
-        
+
         // set maximum group-size
         $group->cg_max_member = $objThis->c4g_groups_default_maximum_size;
-        
+
         $group->cg_member_displayname = $objThis->c4g_groups_default_displayname;
-        
+
         // set first member (group-model)
         //$group->cg_member = serialize( array( $ownerId ) );
-        
+
         // set member-rights
         $group->cg_member_rights = $objThis->c4g_groups_default_member_rights;
         // set owner-rights
         $group->cg_owner_rights = $objThis->c4g_groups_default_owner_rights;
-        
+
         // save group
         $group->save();
         // $group->refresh();
-        
+
         // set first member (member-model)
         //    this needs to be done after the group was saved,
         //    because the new group-id is needed here
@@ -703,14 +697,13 @@ class CGController
 //        $ownerGroups[] = $group->id;
 //        $owner->groups = serialize( $ownerGroups );
 //        $owner->save();
-        
-        return array
-        (
+
+        return [
             'dialogclose' => 'rankcreatedialog' . $ownerId,
             'performaction' => 'viewrankmemberlist:' . $group->id,
-        );
+        ];
     } // end of function "createRank"
-    
+
     /**
      * Creates a new rank.
      *
@@ -718,48 +711,41 @@ class CGController
      * @param  array   $arrConfig
      * @return array
      */
-    public static function addMember ($objThis, $arrConfig, $rankId)
+    public static function addMember($objThis, $arrConfig, $rankId)
     {
         $ownerId = $objThis->User->id;
-        $rank = MemberGroupModel::findByPk( $rankId );
+        $rank = MemberGroupModel::findByPk($rankId);
         $groupId = $rank->cg_pid;
-        
+
         // check permissions
-        if (!MemberModel::hasRightInGroup( $ownerId, $groupId, 'rank_member' ) || !FE_USER_LOGGED_IN) {
-            return array
-            (
+        if (!MemberModel::hasRightInGroup($ownerId, $groupId, 'rank_member') || !FE_USER_LOGGED_IN) {
+            return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
-            );
+            ];
         }
-        
-        
-        
+
         // check if rankname is set...
-        if (empty( $arrConfig['rankmember'] )) {
-            return array
-            (
-                'usermessage' => $arrConfig['rankname'].$GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_ASSIGNRANKMEMBER'],
-            );
+        if (empty($arrConfig['rankmember'])) {
+            return [
+                'usermessage' => $arrConfig['rankname'] . $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_ASSIGNRANKMEMBER'],
+            ];
         }
-        
+
         $memberId = $arrConfig['rankmember'];
-        
+
         if (!MemberModel::assignGroupToMember($memberId, $rankId)) {
-            return array
-            (
-                'usermessage' => $arrConfig['rankname'].$GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NORANKMEMBER'],
-            );
+            return [
+                'usermessage' => $arrConfig['rankname'] . $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NORANKMEMBER'],
+            ];
         } /*else {
           // assign member to the standard group
           if ( ($objThis->c4g_groups_permission_applicationgroup) && ($objThis->c4g_groups_permission_applicationgroup > 0))
             MemberModel::assignGroupToMember($memberId, $objThis->c4g_groups_permission_applicationgroup);
         }*/
-        
-        return array
-        (
+
+        return [
             'dialogclose' => 'rankmemberdialog' . $ownerId,
             'performaction' => 'viewrankmemberlist:' . $rankId,
-        );
+        ];
     } // end of function "createRank"
-    
 } // end of Class

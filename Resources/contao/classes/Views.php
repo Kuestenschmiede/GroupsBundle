@@ -20,5 +20,4 @@ namespace con4gis\GroupsBundle\Resources\contao\classes;
  */
 class Views
 {
-
 } // end of Class
