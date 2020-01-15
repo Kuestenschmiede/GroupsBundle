@@ -36,7 +36,7 @@ array_insert( $GLOBALS['FE_MOD']['con4gis'], 7, array
 /**
  * ACTIVATIONPAGE-FUNCTION
  */
-$GLOBALS['C4G_ACTIVATIONACTION']['c4g_joingroup'] = 'con4gis\GroupsBundle\Resources\contao\classes\CGController';
+$GLOBALS['C4G_ACTIVATIONACTION']['c4g_joingroup'] = 'con4gis\GroupsBundle\Classes\CGController';
 
 $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE']['con4gis Groups'] = array
 (

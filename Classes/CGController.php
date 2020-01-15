@@ -12,7 +12,7 @@
   * @link       https://www.con4gis.org
   */
 
-namespace con4gis\GroupsBundle\Resources\contao\classes;
+namespace con4gis\GroupsBundle\Classes;
 
 use con4gis\CoreBundle\Classes\C4GUtils;
 use con4gis\CoreBundle\Classes\Notification\C4GNotification;

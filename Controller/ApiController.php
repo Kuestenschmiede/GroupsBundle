@@ -14,7 +14,7 @@
 namespace con4gis\GroupsBundle\Controller;
 
 use con4gis\CoreBundle\Controller\BaseController;
-use con4gis\GroupsBundle\Resources\contao\classes\CGController;
+use con4gis\GroupsBundle\Classes\CGController;
 use Contao\ModuleModel;
 use Contao\System;
 use Symfony\Component\HttpFoundation\JsonResponse;

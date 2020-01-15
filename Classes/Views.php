@@ -12,7 +12,7 @@
   * @link       https://www.con4gis.org
   */
 
-namespace con4gis\GroupsBundle\Resources\contao\classes;
+namespace con4gis\GroupsBundle\Classes;
 
 /**
  * Class Views
