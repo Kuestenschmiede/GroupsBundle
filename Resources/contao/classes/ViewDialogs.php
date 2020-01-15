@@ -14,8 +14,8 @@
 
 namespace con4gis\GroupsBundle\Resources\contao\classes;
 
-use con4gis\CoreBundle\Resources\contao\classes\C4GHTMLFactory;
-use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\CoreBundle\Classes\C4GHTMLFactory;
+use con4gis\CoreBundle\Classes\C4GUtils;
 use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;

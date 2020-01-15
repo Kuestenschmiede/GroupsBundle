@@ -15,7 +15,7 @@
 
 namespace con4gis\GroupsBundle\Resources\contao\models;
 
-use con4gis\CoreBundle\Resources\contao\classes\C4GUtils;
+use con4gis\CoreBundle\Classes\C4GUtils;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 
 
