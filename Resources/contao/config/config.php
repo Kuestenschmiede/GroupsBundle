@@ -13,11 +13,6 @@
   */
 
 /**
- * Global settings
- */
-$GLOBALS['con4gis']['groups']['installed'] = true;
-
-/**
  * FRONT END MODULES
  */
 array_insert( $GLOBALS['FE_MOD']['con4gis'], 7, array

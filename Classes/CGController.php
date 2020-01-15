@@ -15,6 +15,7 @@
 namespace con4gis\GroupsBundle\Classes;
 
 use con4gis\CoreBundle\Classes\C4GUtils;
+use con4gis\CoreBundle\Classes\C4GVersionProvider;
 use con4gis\CoreBundle\Classes\Notification\C4GNotification;
 use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
 use con4gis\CoreBundle\Resources\contao\models\C4gLogModel;
@@ -370,7 +371,7 @@ class CGController
 
                 //we have to change the member booking count
                 //ToDo remove with BookingBundle
-                if ($GLOBALS['con4gis']['booking']['installed']) {
+                if (C4GVersionProvider::isInstalled('con4gis/booking')) {
                     \con4gis\BookingBundle\Resources\contao\models\C4gBookingGroupsModel::checkMemberCount($groupId);
                 }
 
@@ -602,7 +603,7 @@ class CGController
 
                             //if a member was added we have to change the member booking count
                             //ToDo remove with BookingBundle
-                            if ($GLOBALS['con4gis']['booking']['installed']) {
+                            if (C4GVersionProvider::isInstalled('con4gis/booking')) {
                                 \con4gis\BookingBundle\Resources\contao\models\C4gBookingGroupsModel::checkMemberCount($params[1]);
                             }
                         }
