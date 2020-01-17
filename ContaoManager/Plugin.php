@@ -16,11 +16,11 @@ namespace con4gis\GroupsBundle\ContaoManager;
 
 use con4gis\CoreBundle\con4gisCoreBundle;
 use con4gis\GroupsBundle\con4gisGroupsBundle;
-use Contao\CoreBundle\ContaoCoreBundle;
+use con4gis\ProjectsBundle\con4gisProjectsBundle;
+use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Config\ConfigInterface;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
-use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Routing\RoutingPluginInterface;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -48,7 +48,7 @@ class Plugin implements RoutingPluginInterface, BundlePluginInterface
     {
         return [
             BundleConfig::create(con4gisGroupsBundle::class)
-                ->setLoadAfter([con4gisCoreBundle::class])
+                ->setLoadAfter([con4gisCoreBundle::class, con4gisProjectsBundle::class])
         ];
     }
 }

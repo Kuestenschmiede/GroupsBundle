@@ -15,4 +15,4 @@
 /**
  * Front end modules
  */
-$GLOBALS['TL_LANG']['FMD']['c4g_groups'] = array('Groups (con4gis)', 'Manage groups from the FE');
+$GLOBALS['TL_LANG']['FMD']['c4g_groups'] = ['groups: Group administration', 'Manage member groups from the frontend.'];

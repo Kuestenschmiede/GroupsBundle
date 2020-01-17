@@ -13,21 +13,13 @@
   */
 
 /**
- * FRONT END MODULES
+ * FRONTEND MODULES
  */
-array_insert( $GLOBALS['FE_MOD']['con4gis'], 7, array
-  (
-    'c4g_groups' => 'con4gis\GroupsBundle\Resources\contao\modules\C4GGroups'
-  )
-);
 
+use con4gis\CoreBundle\Classes\Helper\ArrayHelper;
 
-/**
- * API MODULES
- */
-//$GLOBALS['TL_API']['c4gGroupsService'] = 'con4gis\GroupsBundle\Resources\contao\modules\api\C4gGroupsAjaxApi';
-
-
+$GLOBALS['FE_MOD']['con4gis']['c4g_groups'] = 'con4gis\GroupsBundle\Resources\contao\modules\C4GGroups';
+asort($GLOBALS['FE_MOD']['con4gis']);
 /**
  * ACTIVATIONPAGE-FUNCTION
  */

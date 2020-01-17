@@ -15,7 +15,7 @@
 namespace con4gis\GroupsBundle\Resources\contao\modules;
 
 use con4gis\CoreBundle\Classes\C4GAutomator;
-use con4gis\CoreBundle\Classes\C4GJQueryGUI;
+use con4gis\ProjectsBundle\Classes\jQuery\C4GJQueryGUI;
 use con4gis\CoreBundle\Classes\C4GUtils;
 use con4gis\GroupsBundle\Classes\CGController;
 use con4gis\GroupsBundle\Classes\ViewDialogs;
