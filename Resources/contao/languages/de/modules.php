@@ -15,4 +15,4 @@
 /**
  * Front end modules
  */
-$GLOBALS['TL_LANG']['FMD']['c4g_groups'] = ['groups: Gruppenverwaltung', 'Mitglieder Gruppenverwaltung für das Frontend.'];
+$GLOBALS['TL_LANG']['FMD']['c4g_groups'] = ['(groups) Gruppenverwaltung', 'Mitglieder Gruppenverwaltung für das Frontend.'];
