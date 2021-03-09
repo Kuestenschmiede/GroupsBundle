@@ -16,7 +16,7 @@ namespace con4gis\GroupsBundle\Classes;
 
 use con4gis\CoreBundle\Classes\C4GUtils;
 use con4gis\CoreBundle\Classes\C4GVersionProvider;
-use con4gis\CoreBundle\Classes\Notification\C4GNotification;
+use con4gis\ProjectsBundle\Classes\Notifications\C4GNotification;
 use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
 use con4gis\CoreBundle\Resources\contao\models\C4gLogModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
