@@ -1,21 +1,20 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /*
-  * This file is part of con4gis,
-  * the gis-kit for Contao CMS.
-  *
-  * @package   	con4gis
-  * @version    7
-  * @author  	con4gis contributors (see "authors.txt")
-  * @license 	LGPL-3.0-or-later
-  * @copyright 	Küstenschmiede GmbH Software & Design
-  * @link       https://www.con4gis.org
-  */
+ * This file is part of con4gis, the gis-kit for Contao CMS.
+ * @package con4gis
+ * @version 8
+ * @author con4gis contributors (see "authors.txt")
+ * @license LGPL-3.0-or-later
+ * @copyright (c) 2010-2021, by Küstenschmiede GmbH Software & Design
+ * @link https://www.con4gis.org
+ */
 
 //___LOAD CUSTOM CSS___________________________________________
   // needed to properly display right lists side by side
-  $GLOBALS['TL_CSS'][] = 'bundles/con4gisgroups/be_c4g_groups.css';
-
+if(TL_MODE == "BE") {
+    $GLOBALS['TL_CSS'][] = 'bundles/con4gisgroups/dist/css/be_c4g_groups.css';
+}
 
 //___CONFIG____________________________________________________
   $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][]   = array('tl_module_c4g_groups', 'updateDCA');

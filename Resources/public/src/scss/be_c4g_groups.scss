@@ -1,5 +1,3 @@
-<?php
-
 /*
  * This file is part of con4gis, the gis-kit for Contao CMS.
  * @package con4gis
@@ -10,7 +8,10 @@
  * @link https://www.con4gis.org
  */
 
-/**
- * Miscellaneous
- */
-// $GLOBALS['TL_LANG']['MSC'][''] = '';
+@media (min-width: 768px) {
+
+  .c4g_w50 {
+      width: 50%;
+      float: left;
+  }
+}
