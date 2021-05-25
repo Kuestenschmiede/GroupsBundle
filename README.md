@@ -17,7 +17,7 @@ composer require con4gis/groups
 Alternatively, you can use the Contao Manager to install the con4gis-GroupsBundle.
 
 ## Requirements
-- [Contao](https://github.com/contao/core-bundle) (***4.4.x LTS*** or latest stable release)
+- [Contao](https://github.com/contao/core-bundle) (***4.9.x LTS*** or latest stable release)
 - [CoreBundle](https://github.com/Kuestenschmiede/CoreBundle/releases) (*latest stable release*)
 
 ## Documentation
