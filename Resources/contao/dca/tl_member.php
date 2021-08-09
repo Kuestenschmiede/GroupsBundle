@@ -66,16 +66,17 @@ class tl_member_c4g_groups extends Backend
 
   /**
    * Syncs "group->members"-binding
-   * @param  Array         $groups  Serialized string of members grouplist
-   * @param  DataContainer $dc
-   * @return
+   * @param  string|array $groups  Serialized array or array of member group list
+   * @param  DataContainer|FrontendUser $dc DataContainer in backend, FrontendUser in frontend
+   * @return array
+   * @throws Exception
    */
-  public function syncGroupBinding ($groups, DataContainer $dc)
+  public function syncGroupBinding ($groups, $dc): array
   {
-    $groups = $groups ? unserialize($groups) : array();
+      $groups = StringUtil::deserialize($groups, true);
 
     // check if the dc is really available
-    if ($dc->id) {
+    if ($dc instanceof DataContainer && $dc->id) {
       // get the previous groupset
       $groupCache = $dc->activeRecord->groupcache;
       // check groups against cache to get newly added groups
