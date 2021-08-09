@@ -49,15 +49,17 @@
 class tl_member_c4g_groups extends Backend
 {
   /**
-   * Saves the initial grouplist, for comparison on save
-   * @param  Array         $groups  Serialized string of members grouplist
-   * @param  DataContainer $dc
-   * @return [type]                 [description]
+   * Saves the initial group list, for comparison on save
+   * @param  string|array $groups  Serialized array or array of member group list
+   * @param  DataContainer|FrontendUser $dc DataContainer in backend, FrontendUser in frontend
+   * @return array
    */
-  public function cacheInitGroupConfig ($groups, DataContainer $dc)
+  public function cacheInitGroupConfig ($groups, $dc): array
   {
-    $groups = $groups ? unserialize($groups) : array();
-    $dc->activeRecord->groupcache = $groups;
+    $groups = StringUtil::deserialize($groups, true);
+    if ($dc instanceof DataContainer) {
+        $dc->activeRecord->groupcache = $groups;
+    }
 
     return $groups;
   }
