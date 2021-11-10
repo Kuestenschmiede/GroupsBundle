@@ -13,22 +13,19 @@ namespace con4gis\GroupsBundle\Controller;
 
 
 use con4gis\CoreBundle\Controller\BaseController;
+use con4gis\GroupsBundle\Classes\CGController;
 use con4gis\GroupsBundle\Resources\contao\modules\C4GGroups;
 use Contao\CoreBundle\Controller\FrontendController;
 use Contao\FrontendUser;
 use Contao\ModuleModel;
+use Contao\System;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class GroupsController extends BaseController
+class GroupsController extends AbstractController
 {
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
-    }
-
-
     public function runAction(Request $request, $id, $req)
     {
         $response = new JsonResponse();
@@ -88,5 +85,21 @@ class GroupsController extends BaseController
         $return = $objModule->generateAjax($req);
         $response->setData($return);
         return $response;
+    }
+
+    public function inviteMemberAction(Request $request, $id, $memberEmail, $groupId)
+    {
+        $groupsModule = ModuleModel::findBy('type', 'c4g_groups');
+        System::loadLanguageFile('frontendModules');
+        $response = CGController::inviteMember($groupsModule, $groupId, $memberEmail);
+        return new JsonResponse(['res' => $response]);
+    }
+
+    public function removeMemberFromGroupAction(Request $request, $id, $groupId, $memberId)
+    {
+        $groupsModule = ModuleModel::findBy('type', 'c4g_groups');
+        System::loadLanguageFile('frontendModules');
+        $response = CGController::removeMemberFromGroup($groupsModule, $groupId, [$memberId]);
+        return new JsonResponse(['res' => $response]);
     }
 }

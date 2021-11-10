@@ -15,10 +15,11 @@ use con4gis\CoreBundle\Controller\BaseController;
 use con4gis\GroupsBundle\Classes\CGController;
 use Contao\ModuleModel;
 use Contao\System;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class ApiController extends BaseController
+class ApiController extends AbstractController
 {
     public function inviteMemberAction(Request $request, $memberEmail, $groupId)
     {

@@ -304,9 +304,15 @@ class C4GGroups extends Module
                 $return = $this->executeIfAuthorized( CGController::inviteMember( $this, $values[1], $this->putVars['mailaddress'], $this->frontendUrl ), $values[1], 'member_invite_' );
                 break;
             case 'removemember':
+                $memberIds = [];
+                if ($values[2] && !is_array($values[2])) {
+                    $memberIds[] = $values[2];
+                } else {
+                    $memberIds = $values[2];
+                }
                 $return = empty($values[2])
                     ? CGController::removeMemberFromGroup( $this, $values[1] )
-                    : $this->executeIfAuthorized( CGController::removeMemberFromGroup( $this, $values[1], $values[2] ), $values[1], 'member_remove' );
+                    : $this->executeIfAuthorized( CGController::removeMemberFromGroup( $this, $values[1], $memberIds ), $values[1], 'member_remove' );
                 break;
             case 'sendmembermail':
                 $return = $this->executeIfAuthorized( CGController::sendMailToMember( $this, $values[1], $this->putVars ), $values[1], 'member_contact_' );
