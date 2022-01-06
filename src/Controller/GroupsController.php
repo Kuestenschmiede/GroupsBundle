@@ -16,6 +16,7 @@ use con4gis\CoreBundle\Controller\BaseController;
 use con4gis\GroupsBundle\Classes\CGController;
 use con4gis\GroupsBundle\Resources\contao\modules\C4GGroups;
 use Contao\CoreBundle\Controller\FrontendController;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendUser;
 use Contao\ModuleModel;
 use Contao\System;
@@ -23,10 +24,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class GroupsController extends AbstractController
 {
-    public function runAction(Request $request, $id, $req)
+    private $framework = null;
+
+    /**
+     * @param ContaoFramework $framework
+     */
+    public function __construct(ContaoFramework $framework)
+    {
+        $this->framework = $framework;
+        $this->framework->initialize(true);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @param $req
+     * @return JsonResponse
+     * @Route("/con4gis/groupsService/{id}/{req}", methods={"GET"})
+     */
+    public function getGroupsServiceAction(Request $request, $id, $req)
     {
         $response = new JsonResponse();
         $feUser = FrontendUser::getInstance();
@@ -87,7 +107,15 @@ class GroupsController extends AbstractController
         return $response;
     }
 
-    public function inviteMemberAction(Request $request, $id, $memberEmail, $groupId)
+    /**
+     * @param Request $request
+     * @param $id
+     * @param $memberEmail
+     * @param $groupId
+     * @return JsonResponse
+     * @Route("/con4gis/inviteMember/{memberEmail}/{groupId}", methods={"GET"})
+     */
+    public function getInviteMemberAction(Request $request, $id, $memberEmail, $groupId)
     {
         $groupsModule = ModuleModel::findBy('type', 'c4g_groups');
         System::loadLanguageFile('frontendModules');
@@ -95,6 +123,14 @@ class GroupsController extends AbstractController
         return new JsonResponse(['res' => $response]);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @param $groupId
+     * @param $memberId
+     * @return JsonResponse
+     * @Route("/con4gis/removeMember/{groupId}/{memberId}", methods={"DELETE"})
+     */
     public function removeMemberFromGroupAction(Request $request, $id, $groupId, $memberId)
     {
         $groupsModule = ModuleModel::findBy('type', 'c4g_groups');

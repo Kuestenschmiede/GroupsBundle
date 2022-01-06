@@ -35,7 +35,7 @@ class ViewDialogs
         if (!FE_USER_LOGGED_IN) {
             return;
         }
-        $ownerId = $objThis->User->id;
+        $ownerId = $objThis->user->id;
         $dialogId = 'groupcreatedialog' . $ownerId;
 
         if (!$objThis->currentMemberHasPermission('creategroups')) {
@@ -104,7 +104,7 @@ class ViewDialogs
         }
 
         // current member-id ("shortcut")
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         $view = '<div class="c4gGroups_dialog_groupConfig ui-widget ui-widget-content ui-corner-bottom">' . C4GHTMLFactory::lineBreak();
         ;
@@ -274,7 +274,7 @@ class ViewDialogs
         }
 
         // current member-id ("shortcut")
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         $view = '<div class="c4gGroups_dialog_groupConfig ui-widget ui-widget-content ui-corner-bottom">' . C4GHTMLFactory::lineBreak();
         ;
@@ -409,7 +409,7 @@ class ViewDialogs
                     // an owner was tried to remove
                     $additionalInfo = $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_REMOVEOWNER'];
                 } else {
-                    if ($objMember->id === $objThis->User->id) {
+                    if ($objMember->id === $objThis->user->id) {
                         // the member is going to remove himself
                         $additionalInfo = $GLOBALS['TL_LANG']['C4G_GROUPS']['INFO_REMOVESELF'];
                     }
@@ -483,10 +483,10 @@ class ViewDialogs
       'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_CANNOTLEAVEGROUP'],
     ];
         $confirmAction = 'removemember:' . $groupId;
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         $group = MemberGroupModel::findByPk($groupId);
-        $member = MemberModel::findByPk($objThis->User->id);
+        $member = MemberModel::findByPk($objThis->user->id);
         if (empty($group) || empty($member)) {
             return;
         }
@@ -581,8 +581,8 @@ class ViewDialogs
         $arrDialogButtons = [];
 
         // fetch rights
-        $rightEmail = MemberModel::hasRightInGroup($objThis->User->id, $groupId, 'member_invite_email');
-        $rightLink = MemberModel::hasRightInGroup($objThis->User->id, $groupId, 'member_invite_link');
+        $rightEmail = MemberModel::hasRightInGroup($objThis->user->id, $groupId, 'member_invite_email');
+        $rightLink = MemberModel::hasRightInGroup($objThis->user->id, $groupId, 'member_invite_link');
         // skip 'select-menu' if only the email-right is granted
         if ($rightEmail && !$rightLink) {
             $mode = 'email';
@@ -778,7 +778,7 @@ class ViewDialogs
         if (!FE_USER_LOGGED_IN) {
             return;
         }
-        $ownerId = $objThis->User->id;
+        $ownerId = $objThis->user->id;
         $dialogId = 'rankcreatedialog' . $ownerId;
 
         if (!MemberModel::hasRightInGroup($ownerId, $groupId, 'rank_create')) {
@@ -842,7 +842,7 @@ class ViewDialogs
         if (!FE_USER_LOGGED_IN) {
             return;
         }
-        $ownerId = $objThis->User->id;
+        $ownerId = $objThis->user->id;
         $dialogId = 'rankmemberdialog' . $ownerId;
         $rank = MemberGroupModel::findByPk($rankId);
         $groupId = $rank->cg_pid;

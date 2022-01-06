@@ -21,6 +21,7 @@ use con4gis\GroupsBundle\Classes\ViewLists;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
 use Contao\Database;
+use Contao\FrontendUser;
 use Contao\Module;
 
 /**
@@ -32,7 +33,14 @@ class C4GGroups extends Module
     protected $strTemplate = 'mod_c4g_groups';
     protected $putVars = null;
     protected $frontendUrl = null;
-    
+    public $user = null; //ToDo getter/setter
+
+    public function __construct($objModule, $strColumn='main')
+    {
+        parent::__construct($objModule, $strColumn);
+
+        $this->user = FrontendUser::getInstance();
+    }
     
     /**
      * Display a wildcard in the back end
@@ -62,7 +70,6 @@ class C4GGroups extends Module
     protected function compile ()
     {
         global $objPage;
-        $this->import('FrontendUser', 'User');
         
         // initialize used Javascript Libraries and CSS files
         C4GJQueryGUI::initializeLibraries(
@@ -148,7 +155,6 @@ class C4GGroups extends Module
         $this->loadLanguageFile('frontendModules', $this->c4g_groups_language);
         
         try {
-            $this->import('FrontendUser', 'User');
             $session = $this->Session->getData();
             if (version_compare(VERSION,'3.1','<')) {
                 $this->frontendUrl = $this->Environment->url.$session['referer']['current'];
@@ -211,7 +217,6 @@ class C4GGroups extends Module
     {
         //delete cache -- Übergangslösung bis alles läuft.
         //C4GAutomator::purgeApiCache();
-
         $values = explode(':',$action,5);
         $this->action = $values[0];
         
@@ -248,7 +253,7 @@ class C4GGroups extends Module
                     : array('usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED']);
                 break;
             case 'viewrankcreatedialog':
-                $return = MemberModel::hasRightInGroup( $this->User->id, $values[1], 'rank_create' )
+                $return = MemberModel::hasRightInGroup( $this->user->id, $values[1], 'rank_create' )
                     ? ViewDialogs::viewRankCreateDialog( $this, $values[1] )
                     : array('usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED']);
                 break;
@@ -287,7 +292,7 @@ class C4GGroups extends Module
                     : $this->executeIfAuthorized( CGController::configureGroup( $this, $values[1], $this->putVars ), $ownerGroupId, $ownerRight );
                 break;
             case 'createrank':
-                $return = MemberModel::hasRightInGroup( $this->User->id, $values[1], 'rank_create' )
+                $return = MemberModel::hasRightInGroup( $this->user->id, $values[1], 'rank_create' )
                     ? CGController::createRank( $this, $this->putVars , $values[1])
                     : array('usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED']);
                 break;
@@ -295,7 +300,7 @@ class C4GGroups extends Module
                 $return = $this->executeIfAuthorized( CGController::configureRank( $this, $values[1], $this->putVars ), $ownerGroupId, $ownerRight );
                 break;
             case 'addmember':
-                $return = MemberModel::hasRightInGroup( $this->User->id, $values[1], 'rank_member' )
+                $return = MemberModel::hasRightInGroup( $this->user->id, $values[1], 'rank_member' )
                     ? CGController::addMember( $this, $this->putVars , $values[2])
                     : array('usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED']);
                 break;
@@ -364,7 +369,7 @@ class C4GGroups extends Module
     
     public function executeIfAuthorized ( $function, $groupId, $right )
     {
-        if (MemberModel::hasRightInGroup( $this->User->id, $groupId, $right )) {
+        if (MemberModel::hasRightInGroup( $this->user->id, $groupId, $right )) {
             return $function;
         } else {
             return array
@@ -412,7 +417,7 @@ class C4GGroups extends Module
     {
         if (FE_USER_LOGGED_IN) {
             foreach ($authorizedGroups as $group) {
-                if (MemberGroupModel::isMemberOfGroup( $group, $this->User->id )) return true;
+                if (MemberGroupModel::isMemberOfGroup( $group, $this->user->id )) return true;
             }
         }
         

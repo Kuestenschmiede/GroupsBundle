@@ -1,4 +1,8 @@
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
   con4gis\GroupsBundle\Controller\ApiController:
     class: con4gis\GroupsBundle\Controller\ApiController
     public: true
@@ -9,4 +13,4 @@ services:
     class: con4gis\GroupsBundle\Controller\GroupsController
     public: true
     arguments:
-      - "@service_container"
+      - "@contao.framework"

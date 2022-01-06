@@ -37,7 +37,7 @@ class ViewLists
             return $return;
         }
 
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         // fetch data from db
         $groups = MemberGroupModel::getGroupListForMember($memberId);
@@ -137,7 +137,7 @@ class ViewLists
      */
     public static function viewMemberList($objThis, $groupId)
     {
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         // fetch data from db
         $members = MemberModel::getMemberListForGroup($groupId);
@@ -276,7 +276,7 @@ class ViewLists
             return $return;
         }
 
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         // fetch data from db
         $ranks = MemberGroupModel::getMemberRanksOfGroup($groupId, $memberId);
@@ -370,7 +370,7 @@ class ViewLists
      */
     public static function viewRankMemberList($objThis, $rankId)
     {
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         // fetch data from db
         $members = MemberModel::getMemberListForGroup($rankId);

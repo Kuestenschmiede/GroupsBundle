@@ -45,7 +45,7 @@ class CGController
             ];
         }
 
-        $ownerId = $objThis->User->id;
+        $ownerId = $objThis->user->id;
 
         // check if groupname is set...
         if (empty($arrConfig['groupname']) || empty($ownerId)) {
@@ -133,7 +133,7 @@ class CGController
         }
         $action = '';
 
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         $ownerGroupId = $groupId;
         $deleteRight = 'group_edit_delete';
@@ -227,7 +227,7 @@ class CGController
         }
         $action = '';
 
-        $memberId = $objThis->User->id;
+        $memberId = $objThis->user->id;
 
         $deleteRight = 'rank_edit_delete';
         $ownerGroupId = $group->cg_pid;
@@ -462,7 +462,7 @@ class CGController
                 $mailaddresses = [];
                 foreach ($objMembers as $objMember) {
                     // skip own address
-                    if ($objMember->id == $objThis->User->id) {
+                    if ($objMember->id == $objThis->user->id) {
                         continue;
                     }
                     $mailaddresses[] = $objMember->email;
@@ -483,7 +483,7 @@ class CGController
 
                 // message-text
                 $text = $data['text'];
-                $data['text'] = sprintf($GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_MESSAGE'], $objThis->User->username, $groupName, $text);
+                $data['text'] = sprintf($GLOBALS['TL_LANG']['C4G_GROUPS']['EMAIL_MESSAGE'], $objThis->user->username, $groupName, $text);
             }
         }
         // check mail
@@ -626,7 +626,7 @@ class CGController
      */
     public static function createRank($objThis, $arrConfig, $groupId)
     {
-        $ownerId = $objThis->User->id;
+        $ownerId = $objThis->user->id;
 
         // check permissions
         if (!MemberModel::hasRightInGroup($ownerId, $groupId, 'rank_create') || !FE_USER_LOGGED_IN) {
@@ -712,7 +712,7 @@ class CGController
      */
     public static function addMember($objThis, $arrConfig, $rankId)
     {
-        $ownerId = $objThis->User->id;
+        $ownerId = $objThis->user->id;
         $rank = MemberGroupModel::findByPk($rankId);
         $groupId = $rank->cg_pid;
 
