@@ -393,10 +393,10 @@ class C4GGroups extends Module
         
         switch ($permission) {
             case 'creategroups':
-                $authorizedGroups = unserialize($this->c4g_groups_permission_creategroups_authorized_groups);
+                $authorizedGroups = \Contao\StringUtil::deserialize($this->c4g_groups_permission_creategroups_authorized_groups);
                 break;
             case 'deletegroups':
-                $authorizedGroups = unserialize($this->c4g_groups_permission_deletegroups_authorized_groups);
+                $authorizedGroups = \Contao\StringUtil::deserialize($this->c4g_groups_permission_deletegroups_authorized_groups);
                 break;
             
             default:

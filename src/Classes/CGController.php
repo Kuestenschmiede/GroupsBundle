@@ -102,7 +102,7 @@ class CGController
         // set first member (member-model)
         //    this needs to be done after the group was saved,
         //    because the new group-id is needed here
-        $ownerGroups = unserialize($owner->groups);
+        $ownerGroups = \Contao\StringUtil::deserialize($owner->groups);
         if (empty($owner)) {
             $ownerGroups = [];
         }
@@ -322,7 +322,7 @@ class CGController
         }
 
         // remove members froum group-model
-        $groupmembers = unserialize($group->cg_member);
+        $groupmembers = \Contao\StringUtil::deserialize($group->cg_member);
         $group->cg_member = serialize(array_diff($groupmembers, $memberIds));
         $group->save();
 
@@ -338,7 +338,7 @@ class CGController
         }
 
         foreach ($members as $member) {
-            $memberGroups = unserialize($member->groups);
+            $memberGroups = \Contao\StringUtil::deserialize($member->groups);
             if (!empty($memberGroups)) {
                 $memberGroups = array_diff($memberGroups, $arrGroup);
                 if (empty($memberGroups)) {
@@ -357,7 +357,7 @@ class CGController
 
                         $agroup = MemberGroupModel::findByPk($objThis->c4g_groups_permission_applicationgroup);
                         if ($agroup) {
-                            $groupmembers = unserialize($agroup->cg_member);
+                            $groupmembers = \Contao\StringUtil::deserialize($agroup->cg_member);
                             $agroup->cg_member = serialize(array_diff($groupmembers, $member->id));
                             $agroup->save();
                         }
@@ -691,7 +691,7 @@ class CGController
         // set first member (member-model)
         //    this needs to be done after the group was saved,
         //    because the new group-id is needed here
-//        $ownerGroups = unserialize( $owner->groups );
+//        $ownerGroups = \Contao\StringUtil::deserialize( $owner->groups );
 //        if (empty( $owner )) { $ownerGroups = array(); }
 //        $ownerGroups[] = $group->id;
 //        $owner->groups = serialize( $ownerGroups );

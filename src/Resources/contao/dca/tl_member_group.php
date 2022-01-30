@@ -183,7 +183,7 @@ class tl_member_group_c4g_groups extends Backend
   {
     // throw an exception if the user tries to set a limit
     // that is under the current number of members
-    if ($size > 0 && $size < count(unserialize($dc->activeRecord->cg_member))) {
+    if ($size > 0 && $size < count(\Contao\StringUtil::deserialize($dc->activeRecord->cg_member))) {
       throw new Exception($GLOBALS['TL_LANG']['tl_member_group']['errors']['limit_under_current_count']);
     }
 
@@ -194,7 +194,7 @@ class tl_member_group_c4g_groups extends Backend
   {
     // throw an exception if there is a member-number-restriction
     // which would be exceeded with this action
-    if ($dc->activeRecord->cg_max_member > 0 && $dc->activeRecord->cg_max_member < count(unserialize($members))) {
+    if ($dc->activeRecord->cg_max_member > 0 && $dc->activeRecord->cg_max_member < count(\Contao\StringUtil::deserialize($members))) {
       throw new Exception($GLOBALS['TL_LANG']['tl_member_group']['errors']['to_many_members_in_group']);
     }
 
@@ -209,7 +209,7 @@ class tl_member_group_c4g_groups extends Backend
    */
   public function cacheInitMemberConfig ($members, DataContainer $dc)
   {
-    $members = $members ? unserialize($members) : array();
+    $members = $members ? \Contao\StringUtil::deserialize($members) : array();
     $dc->activeRecord->membercache = $members;
 
     return $members;
@@ -223,7 +223,7 @@ class tl_member_group_c4g_groups extends Backend
    */
   public function syncMemberBinding ($members, DataContainer $dc)
   {
-    $members = $members ? unserialize($members) : array();
+    $members = $members ? \Contao\StringUtil::deserialize($members) : array();
 
     // check if the dc is really available
     if ($dc->id) {
@@ -237,7 +237,7 @@ class tl_member_group_c4g_groups extends Backend
         if (!con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
           $objMember = con4gis\GroupsBundle\Resources\contao\models\MemberModel::findByPk( $member );
           if ($objMember) {
-            $groups = unserialize( $objMember->groups );
+            $groups = \Contao\StringUtil::deserialize( $objMember->groups );
             $groups[] = $dc->id;
             $objMember->groups = serialize( $groups );
             $objMember->save();
@@ -253,7 +253,7 @@ class tl_member_group_c4g_groups extends Backend
         if (con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
           $objMember = con4gis\GroupsBundle\Resources\contao\models\MemberModel::findByPk( $member );
           if ($objMember) {
-            $memberGroups = unserialize( $objMember->groups );
+            $memberGroups = \Contao\StringUtil::deserialize( $objMember->groups );
             $memberGroups = array_diff( $memberGroups, array( $dc->id ) );
             if(empty( $memberGroups )) { $memberGroups = array(); }
             $objMember->groups = serialize( $memberGroups );
@@ -273,7 +273,7 @@ class tl_member_group_c4g_groups extends Backend
    */
   public function deleteGroupFromMembers (DataContainer $dc)
   {
-    $members = unserialize( $dc->cg_member );
+    $members = \Contao\StringUtil::deserialize( $dc->cg_member );
 
     if (!empty( $members )) {
       foreach ($members as $member) {
@@ -281,7 +281,7 @@ class tl_member_group_c4g_groups extends Backend
         if (con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
           $objMember = con4gis\GroupsBundle\Resources\contao\models\MemberModel::findByPk( $member );
           if ($objMember) {
-            $memberGroups = unserialize( $objMember->groups );
+            $memberGroups = \Contao\StringUtil::deserialize( $objMember->groups );
             $memberGroups = array_diff( $memberGroups, array( $dc->id ) );
             if(empty( $memberGroups )) { $memberGroups = array(); }
             $objMember->groups = serialize( $memberGroups );

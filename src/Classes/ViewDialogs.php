@@ -167,12 +167,12 @@ class ViewDialogs
                 $ownergroup = MemberGroupModel::findByPk($ownergroup->cg_pid);
             }
             if ($ownergroup->cg_owner_rights) {
-                $arrOwnerRights = unserialize($ownergroup->cg_owner_rights);
+                $arrOwnerRights = \Contao\StringUtil::deserialize($ownergroup->cg_owner_rights);
             } else {
                 $arrOwnerRights = [];
             }
             if ($group->cg_member_rights) {
-                $arrMemberRights = array_flip(unserialize($group->cg_member_rights));
+                $arrMemberRights = array_flip(\Contao\StringUtil::deserialize($group->cg_member_rights));
             } else {
                 $arrMemberRights = [];
             }
@@ -293,13 +293,13 @@ class ViewDialogs
             $ownergroup = MemberGroupModel::findByPk($group->cg_pid);
 
             if ($ownergroup->cg_owner_rights) {
-                $arrOwnerRights = unserialize($ownergroup->cg_owner_rights);
+                $arrOwnerRights = \Contao\StringUtil::deserialize($ownergroup->cg_owner_rights);
             } else {
                 $arrOwnerRights = [];
             }
 
             if ($group->cg_member_rights) {
-                $arrMemberRights = array_flip(unserialize($group->cg_member_rights));
+                $arrMemberRights = array_flip(\Contao\StringUtil::deserialize($group->cg_member_rights));
             } else {
                 $arrMemberRights = [];
             }

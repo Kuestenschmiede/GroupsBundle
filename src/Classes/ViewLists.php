@@ -73,7 +73,7 @@ class ViewLists
         // insert data into table
         foreach ($groups as $group) {
             // count group members
-            $memberCount = unserialize($group->cg_member);
+            $memberCount = \Contao\StringUtil::deserialize($group->cg_member);
             if (empty($memberCount)) {
                 $memberCount = 0;
             } else {
@@ -312,7 +312,7 @@ class ViewLists
         if ($ranks) {
             foreach ($ranks as $rank) {
                 // count group members
-                $memberCount = unserialize($rank->cg_member);
+                $memberCount = \Contao\StringUtil::deserialize($rank->cg_member);
                 if (empty($memberCount)) {
                     $memberCount = 0;
                 } else {

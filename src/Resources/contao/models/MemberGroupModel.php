@@ -38,7 +38,7 @@ class MemberGroupModel extends \Contao\MemberGroupModel
     if (empty( $objMember )){ return array(); }
 
     // fetch membergroups
-    $groups = unserialize($objMember->groups);
+    $groups = \Contao\StringUtil::deserialize($objMember->groups);
     if (!$groups) { return array(); }
 
     $colGroups = static::findMultipleByIds($groups);
@@ -122,7 +122,7 @@ class MemberGroupModel extends \Contao\MemberGroupModel
     // check if member is part of one or more of the ranks and list them in an array
     $return = array();
     foreach ($ranks as $rank) {
-      $rankMember = unserialize( $rank->cg_member );
+      $rankMember = \Contao\StringUtil::deserialize( $rank->cg_member );
       if ($rankMember && (in_array( $memberId, $rankMember )) || (static::isOwnerOfGroup( $rank->cg_pid, $memberId ))) {
         $return[] = $rank;
       }
@@ -164,7 +164,7 @@ class MemberGroupModel extends \Contao\MemberGroupModel
     if (!$rights) {
       $rights = array();
     } else {
-      $rights = unserialize($rights);
+      $rights = \Contao\StringUtil::deserialize($rights);
     }
 
     // fetch ranks
@@ -173,7 +173,7 @@ class MemberGroupModel extends \Contao\MemberGroupModel
       foreach ($objMemberRanks as $objMemberRank) {
         $rankRights = $objMemberRank->cg_member_rights;
         if ($rankRights) {
-          $rankRights = unserialize($rankRights);
+          $rankRights = \Contao\StringUtil::deserialize($rankRights);
           // add additional rights from rank to the right-set
           $rights = array_merge( $rights, array_diff( $rankRights, $rights ) );
         }
@@ -254,7 +254,7 @@ class MemberGroupModel extends \Contao\MemberGroupModel
 
     // check if user is in member-list
     $return = array();
-    $member = unserialize( $group->cg_member );
+    $member = \Contao\StringUtil::deserialize( $group->cg_member );
     if (is_array( $member ) && in_array( $memberId, $member )) {
       return true;
     } else {
@@ -281,7 +281,7 @@ class MemberGroupModel extends \Contao\MemberGroupModel
     $objGroup = static::findByPk( $groupId );
     if (!$objGroup) { return false; }
 
-    $member = unserialize( $objGroup->cg_member );
+    $member = \Contao\StringUtil::deserialize( $objGroup->cg_member );
     if (is_array( $member ) && in_array( $userId, $member )) {
       return false;
     } else {

@@ -40,7 +40,7 @@ class MemberModel extends \Contao\MemberModel
     if (empty( $objGroup )) return;
 
     // fetch membergroups
-    $members = unserialize($objGroup->cg_member);
+    $members = \Contao\StringUtil::deserialize($objGroup->cg_member);
     if (!is_array( $members ) || empty( $members )) {
       return array();
     }
@@ -63,7 +63,7 @@ class MemberModel extends \Contao\MemberModel
     $objMember = MemberModel::findByPk( $memberId );
     if (!$objMember) return false;
 
-    $groups = unserialize( $objMember->groups );
+    $groups = \Contao\StringUtil::deserialize( $objMember->groups );
     if (is_array( $groups ) && in_array( $groupId, $groups )) {
       return false;
     } else {
