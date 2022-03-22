@@ -77,8 +77,11 @@ class tl_member_c4g_groups extends Backend
 
     // check if the dc is really available
     if ($dc instanceof DataContainer && $dc->id) {
-      // get the previous groupset
+      // get the previous group set
       $groupCache = $dc->activeRecord->groupcache;
+      if (!is_array($groupCache)) {
+          $groupCache = [];
+      }
       // check groups against cache to get newly added groups
       $newGroups = array_diff($groups, $groupCache);
       // and add the member to these groups in the tl_member_groups-table

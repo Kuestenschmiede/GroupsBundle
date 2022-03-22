@@ -162,9 +162,9 @@ class MemberGroupModel extends \Contao\MemberGroupModel
     // get appropriate rights
     $rights = static::isOwnerOfGroup( $ownerGroupId, $memberId ) ? $objOwnerGroup->cg_owner_rights : $objOwnerGroup->cg_member_rights;
     if (!$rights) {
-      $rights = array();
+      $rights = [];
     } else {
-      $rights = \Contao\StringUtil::deserialize($rights);
+      $rights = \Contao\StringUtil::deserialize($rights, true);
     }
 
     // fetch ranks
@@ -173,14 +173,14 @@ class MemberGroupModel extends \Contao\MemberGroupModel
       foreach ($objMemberRanks as $objMemberRank) {
         $rankRights = $objMemberRank->cg_member_rights;
         if ($rankRights) {
-          $rankRights = \Contao\StringUtil::deserialize($rankRights);
-          // add additional rights from rank to the right-set
-          $rights = array_merge( $rights, array_diff( $rankRights, $rights ) );
+          $rankRights = \Contao\StringUtil::deserialize($rankRights, true);
+          // add additional rights from rank to the right set
+          $rights = array_merge($rights, array_diff($rankRights, $rights));
         }
       }
     }
 
-    // return the calculated right-set
+    // return the calculated right set
     return $rights;
   }
 

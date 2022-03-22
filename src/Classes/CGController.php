@@ -322,13 +322,12 @@ class CGController
         }
 
         // remove members froum group-model
-        $groupmembers = \Contao\StringUtil::deserialize($group->cg_member);
-        $group->cg_member = serialize(array_diff($groupmembers, $memberIds));
+        $groupMembers = \Contao\StringUtil::deserialize($group->cg_member, true);
+        $group->cg_member = serialize(array_diff($groupMembers, $memberIds));
         $group->save();
 
         // remove group from member-models
         $arrGroup = [$groupId];
-        $memberGroups = '';
 
         $parentId = $group->cg_pid;
         if ($parentId > 0) {
@@ -338,28 +337,22 @@ class CGController
         }
 
         foreach ($members as $member) {
-            $memberGroups = \Contao\StringUtil::deserialize($member->groups);
+            $memberGroups = \Contao\StringUtil::deserialize($member->groups, true);
             if (!empty($memberGroups)) {
                 $memberGroups = array_diff($memberGroups, $arrGroup);
-                if (empty($memberGroups)) {
-                    $memberGroups = [];
-                }
 
-                //remove member from standardgroup
-                $allgroups = MemberGroupModel::getGroupListForMember($member->id);
-                if (empty($allgroups) && ($objThis->c4g_groups_permission_applicationgroup) && ($objThis->c4g_groups_permission_applicationgroup > 0)) {
+                //remove member from standard group
+                $allGroups = MemberGroupModel::getGroupListForMember($member->id);
+                if (empty($allGroups) && ($objThis->c4g_groups_permission_applicationgroup) && ($objThis->c4g_groups_permission_applicationgroup > 0)) {
                     $applicationGroup = [$objThis->c4g_groups_permission_applicationgroup];
                     if ($applicationGroup) {
                         $memberGroups = array_diff($memberGroups, $applicationGroup);
-                        if (empty($memberGroups)) {
-                            $memberGroups = [];
-                        }
 
-                        $agroup = MemberGroupModel::findByPk($objThis->c4g_groups_permission_applicationgroup);
-                        if ($agroup) {
-                            $groupmembers = \Contao\StringUtil::deserialize($agroup->cg_member);
-                            $agroup->cg_member = serialize(array_diff($groupmembers, $member->id));
-                            $agroup->save();
+                        $aGroup = MemberGroupModel::findByPk($objThis->c4g_groups_permission_applicationgroup);
+                        if ($aGroup) {
+                            $groupMembers = \Contao\StringUtil::deserialize($aGroup->cg_member);
+                            $aGroup->cg_member = serialize(array_diff($groupMembers, [$member->id]));
+                            $aGroup->save();
                         }
                     }
                 }

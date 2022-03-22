@@ -223,12 +223,15 @@ class tl_member_group_c4g_groups extends Backend
    */
   public function syncMemberBinding ($members, DataContainer $dc)
   {
-    $members = $members ? \Contao\StringUtil::deserialize($members) : array();
+    $members = \Contao\StringUtil::deserialize($members, true);
 
     // check if the dc is really available
     if ($dc->id) {
-      // get the previous memberset
+      // get the previous member set
       $memberCache = $dc->activeRecord->membercache;
+      if (!is_array($memberCache)) {
+          $memberCache = [];
+      }
       // check members against cache to get newly added members
       $newMembers = array_diff($members, $memberCache);
       // and add the group to these members in the tl_member-table
@@ -253,10 +256,12 @@ class tl_member_group_c4g_groups extends Backend
         if (con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
           $objMember = con4gis\GroupsBundle\Resources\contao\models\MemberModel::findByPk( $member );
           if ($objMember) {
-            $memberGroups = \Contao\StringUtil::deserialize( $objMember->groups );
-            $memberGroups = array_diff( $memberGroups, array( $dc->id ) );
-            if(empty( $memberGroups )) { $memberGroups = array(); }
-            $objMember->groups = serialize( $memberGroups );
+            $memberGroups = \Contao\StringUtil::deserialize($objMember->groups, true);
+            $memberGroups = array_diff($memberGroups, [$dc->id]);
+            if(empty($memberGroups)) {
+                $memberGroups = [];
+            }
+            $objMember->groups = serialize($memberGroups);
             $objMember->save();
           }
         }
@@ -281,10 +286,12 @@ class tl_member_group_c4g_groups extends Backend
         if (con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup( $dc->id, $member )) {
           $objMember = con4gis\GroupsBundle\Resources\contao\models\MemberModel::findByPk( $member );
           if ($objMember) {
-            $memberGroups = \Contao\StringUtil::deserialize( $objMember->groups );
-            $memberGroups = array_diff( $memberGroups, array( $dc->id ) );
-            if(empty( $memberGroups )) { $memberGroups = array(); }
-            $objMember->groups = serialize( $memberGroups );
+            $memberGroups = \Contao\StringUtil::deserialize($objMember->groups, true);
+            $memberGroups = array_diff($memberGroups, [$dc->id]);
+            if(empty($memberGroups)) {
+                $memberGroups = [];
+            }
+            $objMember->groups = serialize($memberGroups);
             $objMember->save();
           }
         }
