@@ -390,12 +390,13 @@ class CGController
     public static function inviteMember($objThis, $groupId, $mailaddress)
     {
         // check permissions
-        if (!FE_USER_LOGGED_IN) {
+        $user = FrontendUser::getInstance();
+        if (!$user) {
             return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOTLOGGEDIN'],
             ];
         }
-        $user = FrontendUser::getInstance();
+
         if (!MemberModel::hasRightInGroup($user->id, $groupId, 'member_invite_')) {
             return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
@@ -575,9 +576,7 @@ class CGController
         ];
 
         //check if the user is logged in
-        if (FE_USER_LOGGED_IN === true) {
-            $objUser = \FrontendUser::getInstance();
-
+        if ($objUser = \FrontendUser::getInstance()) {
             // check action
             switch ($action) {
                 case 'c4g_joingroup':
@@ -622,7 +621,7 @@ class CGController
         $ownerId = $objThis->user->id;
 
         // check permissions
-        if (!MemberModel::hasRightInGroup($ownerId, $groupId, 'rank_create') || !FE_USER_LOGGED_IN) {
+        if (!MemberModel::hasRightInGroup($ownerId, $groupId, 'rank_create') || !$objThis->user) {
             return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
             ];
@@ -710,7 +709,7 @@ class CGController
         $groupId = $rank->cg_pid;
 
         // check permissions
-        if (!MemberModel::hasRightInGroup($ownerId, $groupId, 'rank_member') || !FE_USER_LOGGED_IN) {
+        if (!MemberModel::hasRightInGroup($ownerId, $groupId, 'rank_member') || !$objThis->user) {
             return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
             ];

@@ -775,7 +775,7 @@ class ViewDialogs
      */
     public static function viewRankCreateDialog($objThis, $groupId)
     {
-        if (!FE_USER_LOGGED_IN) {
+        if (!$objThis->user) {
             return;
         }
         $ownerId = $objThis->user->id;
@@ -839,7 +839,7 @@ class ViewDialogs
      */
     public static function viewAddMemberDialog($objThis, $rankId)
     {
-        if (!FE_USER_LOGGED_IN) {
+        if (!$objThis->user) {
             return;
         }
         $ownerId = $objThis->user->id;

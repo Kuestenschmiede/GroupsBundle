@@ -31,7 +31,7 @@ class ViewLists
     public static function viewGroupList($objThis, $headline = '')
     {
         // check Login-State
-        if (!FE_USER_LOGGED_IN) {
+        if (!$objThis->user) {
             $return['usermessage'] = $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOTLOGGEDIN'];
 
             return $return;
@@ -270,7 +270,7 @@ class ViewLists
     public static function viewRankList($objThis, $groupId)
     {
         // check Login-State
-        if (!FE_USER_LOGGED_IN) {
+        if (!$objThis->user) {
             $return['usermessage'] = $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_NOTLOGGEDIN'];
 
             return $return;

@@ -68,7 +68,7 @@ class GroupsController extends AbstractController
         }
 
         // Show to guests only
-        if ($objModule->guests && FE_USER_LOGGED_IN && !BE_USER_LOGGED_IN && !$objModule->protected)
+        if ($objModule->guests && $feUser && !BE_USER_LOGGED_IN && !$objModule->protected)
         {
             $response->setData('Forbidden');
             $response->setStatusCode(403);
@@ -77,7 +77,7 @@ class GroupsController extends AbstractController
         // Protected element
         if (!BE_USER_LOGGED_IN && $objModule->protected)
         {
-            if (!FE_USER_LOGGED_IN)
+            if (!$feUser)
             {
                 $response->setData('Forbidden');
                 $response->setStatusCode(403);
