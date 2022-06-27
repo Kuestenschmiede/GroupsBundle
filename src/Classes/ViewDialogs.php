@@ -32,7 +32,7 @@ class ViewDialogs
      */
     public static function viewGroupCreateDialog($objThis, $groupId)
     {
-        if (!FE_USER_LOGGED_IN) {
+        if (!$objThis || !$objThis->user) {
             return;
         }
         $ownerId = $objThis->user->id;
@@ -40,8 +40,8 @@ class ViewDialogs
 
         if (!$objThis->currentMemberHasPermission('creategroups')) {
             return [
-        'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
-      ];
+                'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
+            ];
         }
 
         $owner = MemberModel::findByPk($ownerId);
@@ -117,11 +117,11 @@ class ViewDialogs
         $nameRight = 'group_edit_name';
         //$formatRight = 'group_edit_membernameformat';
         $parentGroupId = $groupId;
-        $group_edit_rights = group_edit_rights;
+        $group_edit_rights = 'group_edit_rights';
         if ($group->cg_pid > 0) {
             $nameRight = 'rank_edit_name';
             $parentGroupId = $group->cg_pid;
-            $group_edit_rights = rank_edit_rights;
+            $group_edit_rights = 'rank_edit_rights';
         }
 
         if (MemberModel::hasRightInGroup($memberId, $groupId, $nameRight)) {

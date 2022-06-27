@@ -39,7 +39,7 @@ class CGController
     public static function createGroup($objThis, $arrConfig)
     {
         // check permissions
-        if (!$objThis->currentMemberHasPermission('creategroups') || !FE_USER_LOGGED_IN) {
+        if (!$objThis->currentMemberHasPermission('creategroups') || !$objThis->user) {
             return [
                 'usermessage' => $GLOBALS['TL_LANG']['C4G_GROUPS']['ERROR_PERMISSIONDENIED'],
             ];

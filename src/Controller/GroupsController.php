@@ -44,7 +44,7 @@ class GroupsController extends AbstractController
      * @param $id
      * @param $req
      * @return JsonResponse
-     * @Route("/con4gis/groupsService/{id}/{req}", methods={"GET"})
+     * @Route("/con4gis/groupsService/{id}/{req}", methods={"GET|PUT"})
      */
     public function getGroupsServiceAction(Request $request, $id, $req)
     {

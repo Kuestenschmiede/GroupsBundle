@@ -156,13 +156,9 @@ class C4GGroups extends Module
         
         try {
             $session = $this->Session->getData();
-            if (version_compare(VERSION,'3.1','<')) {
-                $this->frontendUrl = $this->Environment->url.$session['referer']['current'];
-            }
-            else {
-                $this->frontendUrl = $this->Environment->url.TL_PATH.'/'.$session['referer']['current'];
-            }
-            
+            $url = parse_url($_SERVER['HTTP_REFERER']);
+            $this->frontendUrl = $url['host'].$url['path'].'/'.$session['referer']['current'];
+
             if (($_SERVER['REQUEST_METHOD']) == 'PUT') {
                 parse_str(file_get_contents("php://input"),$this->putVars);
             }
@@ -415,7 +411,7 @@ class C4GGroups extends Module
      */
     public function currentMemberIsInAuthorizedGroup ( $authorizedGroups )
     {
-        if (FE_USER_LOGGED_IN) {
+        if ($this->user) {
             foreach ($authorizedGroups as $group) {
                 if (MemberGroupModel::isMemberOfGroup( $group, $this->user->id )) return true;
             }
