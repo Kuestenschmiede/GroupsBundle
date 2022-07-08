@@ -44,13 +44,14 @@ class GroupsController extends AbstractController
      * @param $id
      * @param $req
      * @return JsonResponse
-     * @Route("/con4gis/groupsService/{id}/{req}", methods={"GET|PUT"})
+     * @Route("/con4gis/groupsService/{language}/{id}/{req}", methods={"GET|PUT"})
      */
-    public function getGroupsServiceAction(Request $request, $id, $req)
+    public function getGroupsServiceAction(Request $request, $language, $id, $req)
     {
         $response = new JsonResponse();
         $feUser = FrontendUser::getInstance();
         $feUser->authenticate();
+
         if (!isset( $id ) || !is_numeric( $id )) {
             $response->setStatusCode(400);
         }
@@ -102,6 +103,7 @@ class GroupsController extends AbstractController
 
         $objModule->typePrefix = 'mod_';
         $objModule = new C4GGroups($objModule);
+        $objModule->c4g_groups_language = $language;
         $return = $objModule->generateAjax($req);
         $response->setData($return);
         return $response;

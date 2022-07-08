@@ -111,7 +111,7 @@ class C4GGroups extends Module
         
         // set needed params for "c4gGui.js"
         $data['id'] = $this->id;
-        $data['ajaxUrl'] = "con4gis/groupsService";
+        $data['ajaxUrl'] = "con4gis/groupsService/".$objPage->language;
         $data['ajaxData'] = $this->id;
         
         if ($_GET['state']) {
