@@ -881,7 +881,7 @@ class ViewDialogs
         // groupname (label + input)
         $view .=
             '<label for="cg_rankmember">' . $GLOBALS['TL_LANG']['C4G_GROUPS']['MEMBERNAME'] . '</label>' .
-            '<select id="' . cg_rankmember . '" class="formdata" name="rankmember" size="1" >' . $options . '</select>' .
+            '<select id="cg_rankmember" class="formdata" name="rankmember" size="1" >' . $options . '</select>' .
             C4GHTMLFactory::lineBreak();
 
         $view .= '</div>';
