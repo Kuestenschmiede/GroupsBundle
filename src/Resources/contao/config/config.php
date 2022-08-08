@@ -29,8 +29,8 @@ $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE']['con4gis Groups'] = array
     (
         'recipients'           => array('member_email','new_member_email'),
         'email_subject'        => array('subject'),
-        'email_text'           => array('text_content'),
-        'email_html'           => array('member_name',),
+        'email_text'           => array('member_name','text_content'),
+        'email_html'           => array('member_name','text_content'),
         'email_sender_name'    => array('member_email', 'member_name'),
         'email_sender_address' => array('member_email'),
         'email_recipient_cc'   => array('member_email'),
