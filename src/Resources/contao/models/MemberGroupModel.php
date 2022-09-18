@@ -47,7 +47,8 @@ class MemberGroupModel extends \Contao\MemberGroupModel
     // collect all groups, that have an owner, in an array
     $return = array();
     foreach ($colGroups as $group) {
-      if (!empty( $group->cg_owner_id )) {
+      //ToDo -> AND ($t.start='' OR $t.start<='$time') AND ($t.stop='' OR $t.stop>'$time')
+      if (!empty($group->cg_owner_id) && !$group->disable) {
         $return[] = $group;
       }
     }
