@@ -161,7 +161,7 @@ class ViewDialogs
         // member-rights (label + checkboxes)
         if (MemberModel::hasRightInGroup($memberId, $groupId, $group_edit_rights)) {
             // load the languagefile, which contains the rights
-            \System::loadLanguageFile('tl_member_group');
+            \System::loadLanguageFile('tl_member_group', $objThis->c4g_groups_language);
             $ownergroup = $group;
             if ($ownergroup->cg_pid > 0) {
                 $ownergroup = MemberGroupModel::findByPk($ownergroup->cg_pid);
@@ -289,7 +289,7 @@ class ViewDialogs
         // member-rights (label + checkboxes)
         if (MemberModel::hasRightInGroup($memberId, $groupId, 'rank_edit_rights')) {
             // load the languagefile, which contains the rights
-            \System::loadLanguageFile('tl_member_group');
+            \System::loadLanguageFile('tl_member_group', $objThis->c4g_groups_language);
             $ownergroup = MemberGroupModel::findByPk($group->cg_pid);
 
             if ($ownergroup->cg_owner_rights) {
@@ -328,7 +328,7 @@ class ViewDialogs
                 C4GHTMLFactory::lineBreak();
         }
 
-//        $ownergroupId = $group->cg_pid;
+//      $ownergroupId = $group->cg_pid;
         $deleteRight = 'rank_edit_delete';
         $viewmemberlist = 'viewrankmemberlist';
 
