@@ -15,6 +15,7 @@ namespace con4gis\GroupsBundle\Classes;
 use con4gis\CoreBundle\Classes\C4GHTMLFactory;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use Contao\StringUtil;
 
 /**
  * Class ViewLists
@@ -38,6 +39,13 @@ class ViewLists
         }
 
         $memberId = $objThis->user->id;
+        $mgroups = StringUtil::deserialize($objThis->user->groups);
+        foreach ($mgroups as $mgroup) {
+            //fix group assignment with default registration
+            if (!MemberGroupModel::isMemberOfGroup($mgroup,$memberId)) {
+                MemberGroupModel::assignMemberToGroup($mgroup, $memberId, false);
+            }
+        }
 
         // fetch data from db
         $groups = MemberGroupModel::getGroupListForMember($memberId);
