@@ -46,7 +46,7 @@ div.cg_block {
   box-shadow: inset 40px 0 0 rgba(0,0,0,.1)
 }
 .mod_c4g_groups table.c4gGuiDataTable tr td:first-child:before {
-  content: '';
+  content: "";
   position: absolute;
   display: block;
   width: 16px;
