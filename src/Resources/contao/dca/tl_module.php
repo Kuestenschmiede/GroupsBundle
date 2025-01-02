@@ -1,18 +1,22 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
-
+<?php 
 /*
  * This file is part of con4gis, the gis-kit for Contao CMS.
  * @package con4gis
- * @version 8
+ * @version 10
  * @author con4gis contributors (see "authors.txt")
  * @license LGPL-3.0-or-later
- * @copyright (c) 2010-2022, by Küstenschmiede GmbH Software & Design
+ * @copyright (c) 2010-2025, by Küstenschmiede GmbH Software & Design
  * @link https://www.con4gis.org
  */
 
+use Contao\System;
+use Symfony\Component\HttpFoundation\Request;
+use Contao\Backend;
+use Contao\DataContainer;
+
 //___LOAD CUSTOM CSS___________________________________________
   // needed to properly display right lists side by side
-if(TL_MODE == "BE") {
+if(System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest(System::getContainer()->get('request_stack')->getCurrentRequest() ?? Request::create(''))){
     $GLOBALS['TL_CSS'][] = 'bundles/con4gisgroups/dist/css/be_c4g_groups.css';
 }
 

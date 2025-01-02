@@ -3,10 +3,10 @@
 /*
  * This file is part of con4gis, the gis-kit for Contao CMS.
  * @package con4gis
- * @version 8
+ * @version 10
  * @author con4gis contributors (see "authors.txt")
  * @license LGPL-3.0-or-later
- * @copyright (c) 2010-2022, by Küstenschmiede GmbH Software & Design
+ * @copyright (c) 2010-2025, by Küstenschmiede GmbH Software & Design
  * @link https://www.con4gis.org
  */
 
@@ -17,6 +17,8 @@ use con4gis\CoreBundle\Classes\C4GUtils;
 use con4gis\CoreBundle\Resources\contao\models\C4gActivationkeyModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use Contao\System;
+use Contao\StringUtil;
 
 /**
  * Class ViewDialogs
@@ -161,18 +163,18 @@ class ViewDialogs
         // member-rights (label + checkboxes)
         if (MemberModel::hasRightInGroup($memberId, $groupId, $group_edit_rights)) {
             // load the languagefile, which contains the rights
-            \System::loadLanguageFile('tl_member_group', $objThis->c4g_groups_language);
+            System::loadLanguageFile('tl_member_group', $objThis->c4g_groups_language);
             $ownergroup = $group;
             if ($ownergroup->cg_pid > 0) {
                 $ownergroup = MemberGroupModel::findByPk($ownergroup->cg_pid);
             }
             if ($ownergroup->cg_owner_rights) {
-                $arrOwnerRights = \Contao\StringUtil::deserialize($ownergroup->cg_owner_rights);
+                $arrOwnerRights = StringUtil::deserialize($ownergroup->cg_owner_rights);
             } else {
                 $arrOwnerRights = [];
             }
             if ($group->cg_member_rights) {
-                $arrMemberRights = array_flip(\Contao\StringUtil::deserialize($group->cg_member_rights));
+                $arrMemberRights = array_flip(StringUtil::deserialize($group->cg_member_rights));
             } else {
                 $arrMemberRights = [];
             }
@@ -289,17 +291,17 @@ class ViewDialogs
         // member-rights (label + checkboxes)
         if (MemberModel::hasRightInGroup($memberId, $groupId, 'rank_edit_rights')) {
             // load the languagefile, which contains the rights
-            \System::loadLanguageFile('tl_member_group', $objThis->c4g_groups_language);
+            System::loadLanguageFile('tl_member_group', $objThis->c4g_groups_language);
             $ownergroup = MemberGroupModel::findByPk($group->cg_pid);
 
             if ($ownergroup->cg_owner_rights) {
-                $arrOwnerRights = \Contao\StringUtil::deserialize($ownergroup->cg_owner_rights);
+                $arrOwnerRights = StringUtil::deserialize($ownergroup->cg_owner_rights);
             } else {
                 $arrOwnerRights = [];
             }
 
             if ($group->cg_member_rights) {
-                $arrMemberRights = array_flip(\Contao\StringUtil::deserialize($group->cg_member_rights));
+                $arrMemberRights = array_flip(StringUtil::deserialize($group->cg_member_rights));
             } else {
                 $arrMemberRights = [];
             }

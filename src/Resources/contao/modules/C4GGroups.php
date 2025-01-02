@@ -3,10 +3,10 @@
 /*
  * This file is part of con4gis, the gis-kit for Contao CMS.
  * @package con4gis
- * @version 8
+ * @version 10
  * @author con4gis contributors (see "authors.txt")
  * @license LGPL-3.0-or-later
- * @copyright (c) 2010-2022, by Küstenschmiede GmbH Software & Design
+ * @copyright (c) 2010-2025, by Küstenschmiede GmbH Software & Design
  * @link https://www.con4gis.org
  */
 
@@ -23,6 +23,12 @@ use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
 use Contao\Database;
 use Contao\FrontendUser;
 use Contao\Module;
+use Contao\System;
+use Symfony\Component\HttpFoundation\Request;
+
+use Contao\BackendTemplate;
+use Contao\FilesModel;
+use Contao\StringUtil;
 
 /**
  * Class C4GGroups
@@ -49,14 +55,15 @@ class C4GGroups extends Module
      */
     public function generate ()
     {
-        if (TL_MODE == 'BE') {
-            $objTemplate = new \BackendTemplate('be_wildcard');
+        // if (TL_MODE == 'BE') 
+        if (System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest(System::getContainer()->get('request_stack')->getCurrentRequest() ?? Request::create(''))) {
+            $objTemplate = new BackendTemplate('be_wildcard');
             
             $objTemplate->wildcard = '### '.$GLOBALS['TL_LANG']['FMD']['c4g_groups'][0].' ###';
             $objTemplate->title = $this->headline;
             $objTemplate->id = $this->id;
             $objTemplate->link = $this->title;
-            $objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
+            $objTemplate->href = System::getContainer()->get('router')->generate('contao_backend').'/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
             
             return $objTemplate->parse();
         }
@@ -84,7 +91,7 @@ class C4GGroups extends Module
         
         // load custom themeroller-css if set
         if ($this->c4g_groups_appearance_themeroller_css) {
-            $objFile = \FilesModel::findByUuid($this->c4g_groups_appearance_themeroller_css);
+            $objFile = FilesModel::findByUuid($this->c4g_groups_appearance_themeroller_css);
             $GLOBALS['TL_CSS']['c4g_jquery_ui'] = $objFile->path;
         } else if(!empty($this->c4g_groups_uitheme_css_select) && ($this->c4g_groups_uitheme_css_select != 'settings')) {
             $theme = $this->c4g_groups_uitheme_css_select;
@@ -96,7 +103,7 @@ class C4GGroups extends Module
                 $settings = $settings[0];
             }
             if ($settings && $settings['c4g_appearance_themeroller_css']) {
-                $objFile = \FilesModel::findByUuid($this->settings['c4g_appearance_themeroller_css']);
+                $objFile = FilesModel::findByUuid($this->settings['c4g_appearance_themeroller_css']);
                 $GLOBALS['TL_CSS']['c4g_jquery_ui'] = $objFile->path;
             } else if ($settings && $settings['c4g_uitheme_css_select']) {
                 $theme = $settings['c4g_uitheme_css_select'];
@@ -114,15 +121,20 @@ class C4GGroups extends Module
         $data['ajaxUrl'] = "con4gis/groupsService/".$objPage->language;
         $data['ajaxData'] = $this->id;
         
-        if ($_GET['state']) {
+       /*  if ($_GET['state']) {
             $request = $_GET['state'];
+        } else {
+            $request = 'initnav';
+        } */
+
+        $getState = System::getContainer()->get('request_stack')->getCurrentRequest()->query->has('state');
+        if ($getState) {
+            $request = $getState;
         } else {
             $request = 'initnav';
         }
         $data['initData'] = $this->generateAjax($request);
-        
         $data['div'] = 'c4g_groups';
-        
         
         $this->Template->cgData = $data;
     }
@@ -138,7 +150,8 @@ class C4GGroups extends Module
         if ($request==null) {
             
             // Ajax Request: read get parameter "req"
-            $request = $_GET['req'];
+            // $request = $_GET['req'];
+            $request = System::getContainer()->get('request_stack')->getCurrentRequest()->query->has('req');
             if ($request!='undefined') {
                 // replace "state" parameter in Session-Referer to force correct
                 // handling after login with "redirect back" set
@@ -155,7 +168,7 @@ class C4GGroups extends Module
         $this->loadLanguageFile('frontendModules', $this->c4g_groups_language);
         
         try {
-            $session = $this->Session->getData();
+            $session = isset($this->Session) ? $this->Session->getData() : null;
             $url = parse_url($_SERVER['HTTP_REFERER']);
             $this->frontendUrl = $url['host'].$url['path'].'/'.$session['referer']['current'];
 
@@ -165,13 +178,17 @@ class C4GGroups extends Module
             
             // if there was an initial get parameter "state" then use it for jumping directly
             // to the refering function
-            if (($request=='initnav') && $_GET['initreq']) {
-                $_GET['historyreq'] = $_GET['initreq'];
+            $getInitReq = System::getContainer()->get('request_stack')->getCurrentRequest()->query->has('initreq');
+            $getHistoryReq = System::getContainer()->get('request_stack')->getCurrentRequest()->query->has('historyreq');
+            if (($request=='initnav') && /* $_GET['initreq'] */ $getInitReq) {
+                // $_GET['historyreq'] = $_GET['initreq'];
+                $getHistoryReq = $getInitReq;
             }
             
             // history navigation
-            if ($_GET['historyreq']) {
-                $actions = explode(';',$_GET['historyreq']);
+            $getHistoryReq = System::getContainer()->get('request_stack')->getCurrentRequest()->query->has('historyreq');
+            if (/* $_GET['historyreq'] */ $getHistoryReq) {
+                $actions = explode(';', $getHistoryReq/* $_GET['historyreq'] */);
                 $result = array();
                 foreach ($actions AS $action) {
                     $r = $this->performHistoryAction($action);
@@ -389,10 +406,10 @@ class C4GGroups extends Module
         
         switch ($permission) {
             case 'creategroups':
-                $authorizedGroups = \Contao\StringUtil::deserialize($this->c4g_groups_permission_creategroups_authorized_groups);
+                $authorizedGroups = StringUtil::deserialize($this->c4g_groups_permission_creategroups_authorized_groups);
                 break;
             case 'deletegroups':
-                $authorizedGroups = \Contao\StringUtil::deserialize($this->c4g_groups_permission_deletegroups_authorized_groups);
+                $authorizedGroups = StringUtil::deserialize($this->c4g_groups_permission_deletegroups_authorized_groups);
                 break;
             
             default:

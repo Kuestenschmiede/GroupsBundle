@@ -2,10 +2,10 @@
 /*
  * This file is part of con4gis, the gis-kit for Contao CMS.
  * @package con4gis
- * @version 8
+ * @version 10
  * @author con4gis contributors (see "authors.txt")
  * @license LGPL-3.0-or-later
- * @copyright (c) 2010-2022, by Küstenschmiede GmbH Software & Design
+ * @copyright (c) 2010-2025, by Küstenschmiede GmbH Software & Design
  * @link https://www.con4gis.org
  */
 
@@ -49,8 +49,10 @@ class GroupsController extends AbstractController
     public function getGroupsServiceAction(Request $request, $language, $id, $req)
     {
         $response = new JsonResponse();
-        $feUser = FrontendUser::getInstance();
-        $feUser->authenticate();
+         $feUser = FrontendUser::getInstance()->id;
+        // $feUser->authenticate();
+
+        // $feUser = System::getContainer()->get('contao.frontend_user');
 
         if (!isset( $id ) || !is_numeric( $id )) {
             $response->setStatusCode(400);
@@ -69,14 +71,16 @@ class GroupsController extends AbstractController
         }
 
         // Show to guests only
-        if ($objModule->guests && $feUser && !BE_USER_LOGGED_IN && !$objModule->protected)
+        $hasBackendUser = System::getContainer()->get('contao.security.token_checker')->hasBackendUser();
+        // if ($objModule->guests && $feUser && !BE_USER_LOGGED_IN && !$objModule->protected)
+        if ($objModule->guests && $feUser && !$hasBackendUser && !$objModule->protected)
         {
             $response->setData('Forbidden');
             $response->setStatusCode(403);
         }
 
         // Protected element
-        if (!BE_USER_LOGGED_IN && $objModule->protected)
+        if (!$hasBackendUser && $objModule->protected)
         {
             if (!$feUser)
             {

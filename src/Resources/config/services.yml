@@ -14,3 +14,7 @@ services:
     public: true
     arguments:
       - "@contao.framework"
+  con4gis\GroupsBundle\Classes\Notifications\:
+    resource: '../../Classes/Notifications'
+    autoconfigure: true
+    autowire: true

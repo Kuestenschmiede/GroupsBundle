@@ -3,10 +3,10 @@
 /*
  * This file is part of con4gis, the gis-kit for Contao CMS.
  * @package con4gis
- * @version 8
+ * @version 10
  * @author con4gis contributors (see "authors.txt")
  * @license LGPL-3.0-or-later
- * @copyright (c) 2010-2022, by Küstenschmiede GmbH Software & Design
+ * @copyright (c) 2010-2025, by Küstenschmiede GmbH Software & Design
  * @link https://www.con4gis.org
  */
 
@@ -21,7 +21,7 @@ use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
 use Contao\FrontendUser;
 use Contao\System;
-use NotificationCenter\Model\Notification;
+use Terminal42\NotificationCenterBundle\NotificationCenter;
 
 /**
  * Class CGController
@@ -102,7 +102,7 @@ class CGController
         // set first member (member-model)
         //    this needs to be done after the group was saved,
         //    because the new group-id is needed here
-        $ownerGroups = \Contao\StringUtil::deserialize($owner->groups);
+        $ownerGroups = StringUtil::deserialize($owner->groups);
         if (empty($owner)) {
             $ownerGroups = [];
         }
@@ -414,7 +414,7 @@ class CGController
         }
 
         // check if a user with this emailaddress has already joined the group
-        $objMember = \MemberModel::findOneBy('email', $mailaddress);
+        $objMember = MemberModel::findOneBy('email', $mailaddress);
         if ($objMember) {
             if (MemberGroupModel::isMemberOfGroup($groupId, $objMember->id)) {
                 return [
@@ -490,7 +490,7 @@ class CGController
             $notification = new C4GNotification($GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE']['con4gis Groups']['notify_member']);
             $notification->setTokenValue('mail_receiver', $data['to']);
             $notification->setTokenValue('text_content', $data['text']);
-            $notId = Notification::findByType('notify_member')->id;
+            $notId = NotificationCenter::findByType('notify_member')->id;
             $notification->send([$notId]);
 
             return [
@@ -543,7 +543,7 @@ class CGController
 //          $notification->setTokenValue('groupname', $groupName);
             $notification->setTokenValue('subject', $mailData['subject']);
             $notification->setTokenValue('text_content', $mailData['text']);
-            $notId = Notification::findByType('invite_member')->id;
+            $notId = NotificationCenter::findByType('invite_member')->id;
             $notification->send([$notId]);
 
             return true;

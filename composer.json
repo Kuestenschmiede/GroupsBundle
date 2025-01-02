@@ -22,10 +22,10 @@
     "issues": "https://github.com/Kuestenschmiede/GroupsBundle/issues"
   },
   "require": {
-    "php": "^7.4 || ^8.0",
-    "contao/core-bundle": "^4.9",
-    "con4gis/core": "^6.0 || ^7.0",
-    "con4gis/projects": "^4.0"
+    "php": "^8.0",
+    "contao/core-bundle": "^4.13 || ^5.0",
+    "con4gis/core": "^7.2",
+    "con4gis/projects": "^5.0"
   },
   "conflict": {
     "contao/core": "*",
@@ -51,7 +51,7 @@
   "extra": {
     "contao-manager-plugin": "con4gis\\GroupsBundle\\ContaoManager\\Plugin",
     "branch-alias": {
-      "dev-main": "2.8.x-dev"
+      "dev-main": "2.9.x-dev"
     }
   }
 }

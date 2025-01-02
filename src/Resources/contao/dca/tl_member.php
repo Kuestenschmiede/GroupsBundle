@@ -3,12 +3,16 @@
 /*
  * This file is part of con4gis, the gis-kit for Contao CMS.
  * @package con4gis
- * @version 8
+ * @version 10
  * @author con4gis contributors (see "authors.txt")
  * @license LGPL-3.0-or-later
- * @copyright (c) 2010-2022, by Küstenschmiede GmbH Software & Design
+ * @copyright (c) 2010-2025, by Küstenschmiede GmbH Software & Design
  * @link https://www.con4gis.org
  */
+
+ use Contao\Backend;
+ use Contao\StringUtil;
+ use Contao\DataContainer;
 
 
 //___CONFIG____________________________________________________
@@ -91,11 +95,11 @@ class tl_member_c4g_groups extends Backend
           $objGroup = \con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::findByPk($group);
           if ($objGroup) {
             // check if the group has a member-limitation
-            if ($objGroup->cg_max_member > 0 && $objGroup->cg_max_member <= count(\Contao\StringUtil::deserialize($objGroup->cg_member))) {
+            if ($objGroup->cg_max_member > 0 && $objGroup->cg_max_member <= count(StringUtil::deserialize($objGroup->cg_member))) {
               throw new Exception($GLOBALS['TL_LANG']['tl_member']['errors']['to_many_members_in_group'] . ' (' . $objGroup->name . ')');
             }
 
-            $members = \Contao\StringUtil::deserialize( $objGroup->cg_member );
+            $members = StringUtil::deserialize( $objGroup->cg_member );
             $members[] = $dc->id;
             $objGroup->cg_member = serialize( $members );
             $objGroup->save();
@@ -139,7 +143,7 @@ class tl_member_c4g_groups extends Backend
    */
   public function deleteMemberFromGroups (DataContainer $dc)
   {
-    $groups = \Contao\StringUtil::deserialize( $dc->groups );
+    $groups = StringUtil::deserialize( $dc->groups );
 
     if (!empty( $groups )) {
       foreach ($groups as $group) {
@@ -147,7 +151,7 @@ class tl_member_c4g_groups extends Backend
         if (\con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::isMemberOfGroup($group, $dc->id)) {
           $objGroup = \con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel::findByPk($group);
           if ($objGroup) {
-            $members = \Contao\StringUtil::deserialize( $objGroup->cg_member );
+            $members = StringUtil::deserialize( $objGroup->cg_member );
             // not the most performant way, but reliable
             // walk through the array and keep every user, that is not this user
             $cleanedMembers = array();
