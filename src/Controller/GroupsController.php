@@ -44,8 +44,11 @@ class GroupsController extends AbstractController
      * @param $id
      * @param $req
      * @return JsonResponse
-     * @Route("/con4gis/groupsService/{language}/{id}/{req}", methods={"GET|PUT"})
      */
+    #[Route(
+        path: '/con4gis/groupsService/{language}/{id}/{req}',
+        methods: ['GET', 'PUT']
+    )]
     public function getGroupsServiceAction(Request $request, $language, $id, $req)
     {
         $response = new JsonResponse();
@@ -119,8 +122,11 @@ class GroupsController extends AbstractController
      * @param $memberEmail
      * @param $groupId
      * @return JsonResponse
-     * @Route("/con4gis/inviteMember/{memberEmail}/{groupId}", methods={"GET"})
      */
+    #[Route(
+        path: '/con4gis/inviteMember/{memberEmail}/{groupId}',
+        methods: ['GET']
+    )]
     public function getInviteMemberAction(Request $request, $id, $memberEmail, $groupId)
     {
         $groupsModule = ModuleModel::findBy('type', 'c4g_groups');
@@ -135,8 +141,11 @@ class GroupsController extends AbstractController
      * @param $groupId
      * @param $memberId
      * @return JsonResponse
-     * @Route("/con4gis/removeMember/{groupId}/{memberId}", methods={"DELETE"})
      */
+    #[Route(
+        path: '/con4gis/removeMember/{groupId}/{memberId}',
+        methods: ['DELETE']
+    )]
     public function removeMemberFromGroupAction(Request $request, $id, $groupId, $memberId)
     {
         $groupsModule = ModuleModel::findBy('type', 'c4g_groups');

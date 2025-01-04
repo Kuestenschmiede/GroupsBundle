@@ -55,8 +55,7 @@ class C4GGroups extends Module
      */
     public function generate ()
     {
-        // if (TL_MODE == 'BE') 
-        if (System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest(System::getContainer()->get('request_stack')->getCurrentRequest() ?? Request::create(''))) {
+        if (C4GUtils::isBackend()) {
             $objTemplate = new BackendTemplate('be_wildcard');
             
             $objTemplate->wildcard = '### '.$GLOBALS['TL_LANG']['FMD']['c4g_groups'][0].' ###';
