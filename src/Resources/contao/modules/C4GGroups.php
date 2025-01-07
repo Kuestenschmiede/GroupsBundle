@@ -20,6 +20,7 @@ use con4gis\GroupsBundle\Classes\ViewDialogs;
 use con4gis\GroupsBundle\Classes\ViewLists;
 use con4gis\GroupsBundle\Resources\contao\models\MemberGroupModel;
 use con4gis\GroupsBundle\Resources\contao\models\MemberModel;
+use Contao\ArrayUtil;
 use Contao\Database;
 use Contao\FrontendUser;
 use Contao\Module;
@@ -191,7 +192,7 @@ class C4GGroups extends Module
                 $result = array();
                 foreach ($actions AS $action) {
                     $r = $this->performHistoryAction($action);
-                    array_insert($result, 0, $r);
+                    ArrayUtil::arrayInsert($result, 0, $r);
                 }
                 
             } else {
