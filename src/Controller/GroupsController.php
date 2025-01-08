@@ -40,6 +40,10 @@ class GroupsController extends AbstractController
     }
 
     /**
+     * @Route(
+     *      path="/con4gis/groupsService/{language}/{id}/{req}",
+     *      methods={"GET", "PUT"}
+     *  )
      * @param Request $request
      * @param $id
      * @param $req
@@ -117,6 +121,10 @@ class GroupsController extends AbstractController
     }
 
     /**
+     * @Route(
+     *      path="/con4gis/inviteMember/{memberEmail}/{groupId}",
+     *      methods={"GET"}
+     *  )
      * @param Request $request
      * @param $id
      * @param $memberEmail
@@ -136,6 +144,10 @@ class GroupsController extends AbstractController
     }
 
     /**
+     * @Route(
+     *      path="/con4gis/removeMember/{groupId}/{memberId}",
+     *      methods={"DELETE"}
+     *  )
      * @param Request $request
      * @param $id
      * @param $groupId
