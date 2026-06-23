@@ -1,4 +1,4 @@
 controllers:
     resource: '../../Controller/'
-    type: annotation #attribute
+    type: attribute
 
