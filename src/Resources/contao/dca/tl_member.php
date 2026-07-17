@@ -17,7 +17,7 @@
 
 //___CONFIG____________________________________________________
 
-  $GLOBALS['TL_DCA']['tl_member']['config']['ondelete_callback'][] = array('tl_member_c4g_groups', 'deleteMemberFromGroups');
+  $GLOBALS['TL_DCA']['tl_member']['config']['ondelete_callback'][] = array('tl_member_c4g_groups','deleteMemberFromGroups');
 
 //___PALETTES__________________________________________________
 
@@ -33,8 +33,8 @@
     'inputType'               => 'select',
     'sql'                     => "blob NULL",
     'foreignKey'              => 'tl_member_group.name',
-    'relation'                => array('type'=>'belongsToMany', 'load'=>'lazy'),
-    'eval'                    => array('tl_class'=>'long', 'submitOnChange'=>true, 'multiple'=>true, 'feEditable'=>true, 'feGroup'=>'login', 'chosen'=>true),
+    'relation'                => array('type'=>'belongsToMany','load'=>'lazy'),
+    'eval'                    => array('tl_class'=>'long','submitOnChange'=>true,'multiple'=>true,'feEditable'=>true,'feGroup'=>'login','chosen'=>true),
     'load_callback'           => array(array('tl_member_c4g_groups','cacheInitGroupConfig')),
     'save_callback'           => array(array('tl_member_c4g_groups','syncGroupBinding')),
   );
@@ -43,7 +43,7 @@
   (
     'exclude'                 => true,
     'inputType'               => 'text',
-    'eval'                    => array('feEditable'=>false, 'doNotShow'=>true, 'feViewable'=>false, 'disabled'=>true/*, 'feGroup'=>'login'*/),
+    'eval'                    => array('feEditable'=>false,'doNotShow'=>true,'feViewable'=>false,'disabled'=>true/*,'feGroup'=>'login'*/),
   );
 
 

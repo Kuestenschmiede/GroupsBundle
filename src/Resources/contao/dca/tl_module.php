@@ -21,16 +21,11 @@ if(System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest
 }
 
 //___CONFIG____________________________________________________
-  $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][]   = array('tl_module_c4g_groups', 'updateDCA');
+  $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][]   = array('tl_module_c4g_groups','updateDCA');
 
 
 //___PALETTES__________________________________________________
-	$GLOBALS['TL_DCA']['tl_module']['palettes']['c4g_groups'] = '{title_legend},name,headline,type;'.
-                                                              '{c4g_groups_appearance_legend},c4g_groups_appearance_highlight_owner,c4g_groups_uitheme_css_select,c4g_groups_appearance_themeroller_css;'.
-																															'{c4g_groups_groupdefaults_legend},c4g_groups_default_maximum_size,c4g_groups_default_displayname,c4g_groups_default_member_rights,c4g_groups_default_owner_rights;'.
-																															'{c4g_groups_permissions_legend},c4g_groups_permission_creategroups_authorized_groups,c4g_groups_permission_deletegroups_authorized_groups;'.
-																															'{protected_legend:hide},protected;'.
-																															'{expert_legend:hide},c4g_groups_permission_applicationgroup,guests,cssID,space';
+	$GLOBALS['TL_DCA']['tl_module']['palettes']['c4g_groups'] = '{title_legend},name,headline,type;' . '{c4g_groups_appearance_legend},c4g_groups_appearance_highlight_owner,c4g_groups_uitheme_css_select,c4g_groups_appearance_themeroller_css;' . '{c4g_groups_groupdefaults_legend},c4g_groups_default_maximum_size,c4g_groups_default_displayname,c4g_groups_default_member_rights,c4g_groups_default_owner_rights;' . '{c4g_groups_permissions_legend},c4g_groups_permission_creategroups_authorized_groups,c4g_groups_permission_deletegroups_authorized_groups;' . '{protected_legend:hide},protected;' . '{expert_legend:hide},c4g_groups_permission_applicationgroup,guests,cssID,space';
 
 
 //___FIELDS____________________________________________________
@@ -50,7 +45,7 @@ if(System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest
   'default'                 => 'settings',
   'inputType'               => 'radio',
   'options'                 => array('settings','base','black-tie','blitzer','cupertino','dark-hive','dot-luv','eggplant','excite-bike','flick','hot-sneaks','humanity','le-frog','mint-choc','overcast','pepper-grinder','redmond','smoothness','south-street','start','sunny','swanky-purse','trontastic','ui-darkness','ui-lightness','vader'),
-  'eval'                    => array('mandatory'=>true, 'submitOnChange' => true),
+  'eval'                    => array('mandatory'=>true,'submitOnChange' => true),
   'reference'               => &$GLOBALS['TL_LANG']['tl_module']['c4g_references'],
   'sql'                     => "char(100) NOT NULL default 'settings'"
   );
@@ -59,7 +54,7 @@ if(System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest
     'label'                   => &$GLOBALS['TL_LANG']['tl_module']['c4g_groups']['fields']['appearance_themeroller_css'],
     'exclude'                 => true,
     'inputType'               => 'fileTree',
-    'eval'                    => array('fieldType'=>'radio', 'files'=>true, 'extensions'=>'css'),
+    'eval'                    => array('fieldType'=>'radio','files'=>true,'extensions'=>'css'),
     'sql'                     => "binary(16) NULL"
   );
 
@@ -150,7 +145,7 @@ if(System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest
       'foreignKey'        => 'tl_member_group.name',
       'eval'              => array('mandatory' => false),
       'sql'               => "int(10) NULL",
-      'relation'          => array('type' => 'hasOne', 'load' => 'lazy')
+      'relation'          => array('type' => 'hasOne','load' => 'lazy')
   );
 
 

@@ -24,15 +24,15 @@ use Contao\StringUtil;
 }
 
 //___CONFIG____________________________________________________
-  $GLOBALS['TL_DCA']['tl_member_group']['config']['onload_callback'][]   = array('tl_member_group_c4g_groups', 'updateDCA');
-  $GLOBALS['TL_DCA']['tl_member_group']['config']['ondelete_callback'][] = array('tl_member_group_c4g_groups', 'deleteGroupFromMembers');
+  $GLOBALS['TL_DCA']['tl_member_group']['config']['onload_callback'][]   = array('tl_member_group_c4g_groups','updateDCA');
+  $GLOBALS['TL_DCA']['tl_member_group']['config']['ondelete_callback'][] = array('tl_member_group_c4g_groups','deleteGroupFromMembers');
 
 
 //___PALETTES__________________________________________________
 PaletteManipulator::create()
-    ->addLegend('c4g_groups_legend', 'redirect_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_BEFORE)
-    ->addField(array('cg_owner_id','cg_max_member','cg_member_displayname','cg_member','cg_member_rights','cg_owner_rights'), 'c4g_groups_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_APPEND)
-    ->applyToPalette('default', 'tl_member_group');
+    ->addLegend('c4g_groups_legend','redirect_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_BEFORE)
+    ->addField(array('cg_owner_id','cg_max_member','cg_member_displayname','cg_member','cg_member_rights','cg_owner_rights'),'c4g_groups_legend', Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_APPEND)
+    ->applyToPalette('default','tl_member_group');
 
 //___FIELDS____________________________________________________
   $GLOBALS['TL_DCA']['tl_member_group']['fields']['cg_pid'] = array
@@ -61,8 +61,8 @@ PaletteManipulator::create()
     'exclude'               => true,
     'inputType'             => 'text',
     'default'               => 0,
-    'eval'                  => array('rgxp' => 'digit', 'submitOnChange'=>true, 'tl_class'=>'w50'),
-    'save_callback'         => array(array('tl_member_group_c4g_groups', 'checkSetSize')),
+    'eval'                  => array('rgxp' => 'digit','submitOnChange'=>true,'tl_class'=>'w50'),
+    'save_callback'         => array(array('tl_member_group_c4g_groups','checkSetSize')),
     'sql'                   => "int(255) unsigned NULL"
   );
 
@@ -82,13 +82,13 @@ PaletteManipulator::create()
     'exclude'               => true,
     'filter'                => true,
     'inputType'             => 'select',
-    'eval'                  => array('tl_class'=>'long clr', 'submitOnChange'=>true, 'multiple'=>true, 'feEditable'=>true, 'feGroup'=>'login', 'chosen'=>true),
+    'eval'                  => array('tl_class'=>'long clr','submitOnChange'=>true,'multiple'=>true,'feEditable'=>true,'feGroup'=>'login','chosen'=>true),
     'foreignKey'            => 'tl_member.email',
-    'relation'              => array('type'=>'belongsToMany', 'load'=>'lazy'),
-    'load_callback'         => array(array('tl_member_group_c4g_groups', 'cacheInitMemberConfig')),
+    'relation'              => array('type'=>'belongsToMany','load'=>'lazy'),
+    'load_callback'         => array(array('tl_member_group_c4g_groups','cacheInitMemberConfig')),
     'save_callback'         => array(
-                                  array('tl_member_group_c4g_groups', 'checkSize'),
-                                  array('tl_member_group_c4g_groups', 'syncMemberBinding'),
+                                  array('tl_member_group_c4g_groups','checkSize'),
+                                  array('tl_member_group_c4g_groups','syncMemberBinding'),
                                ),
     'sql'                   => "blob NULL",
   );
@@ -96,7 +96,7 @@ PaletteManipulator::create()
   (
     'exclude'               => true,
     'inputType'             => 'text',
-    'eval'                  => array('feEditable'=>false, 'doNotShow'=>true, 'feViewable'=>false, 'disabled'=>true/*, 'feGroup'=>'login'*/),
+    'eval'                  => array('feEditable'=>false,'doNotShow'=>true,'feViewable'=>false,'disabled'=>true/*,'feGroup'=>'login'*/),
   );
 
   $GLOBALS['TL_DCA']['tl_member_group']['fields']['cg_member_rights'] = array
